@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Affiliate Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #06C755; --green-dark: #04A846; --green-tint: #E8F8EE;
+    --ink: #1A1A1A; --muted: #6B7280; --line: #E5E7EB; --bg: #F5F6F7; --card: #FFFFFF;
+    --warn: #B45309; --warn-tint: #FEF3C7; --bad: #B91C1C; --bad-tint: #FEE2E2; --info: #1D4ED8; --info-tint: #DBEAFE;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans Thai', system-ui, sans-serif; font-size: 15px; line-height: 1.5; }
+  body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+  header { background: var(--green); color: #fff; padding: 18px 16px 22px; }
+  header h1 { margin: 0; font-size: 20px; font-weight: 700; }
+  header p { margin: 2px 0 0; opacity: .9; font-size: 13px; }
+  main { padding: 0 16px; margin-top: -10px; }
+  .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+  .card h2 { margin: 0 0 8px; font-size: 16px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  label { display: block; font-weight: 600; font-size: 14px; margin: 14px 0 6px; }
+  label .req { color: var(--bad); }
+  input, select, textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px; font: inherit; background: #fff; color: var(--ink); }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--green); border-color: transparent; }
+  textarea { min-height: 72px; resize: vertical; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 13px; cursor: pointer; user-select: none; }
+  .chip.on { background: var(--green-tint); border-color: var(--green); color: var(--green-dark); font-weight: 600; }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; font-size: 13px; }
+  .check input { width: 20px; height: 20px; margin-top: 2px; flex: none; }
+  .btn { display: block; width: 100%; border: 0; border-radius: 12px; padding: 13px; font: inherit; font-weight: 700; background: var(--green); color: #fff; cursor: pointer; text-align: center; text-decoration: none; }
+  .btn:active { background: var(--green-dark); }
+  .btn[disabled] { background: #C7CDD3; cursor: not-allowed; }
+  .btn.ghost { background: #fff; color: var(--green-dark); border: 1px solid var(--green); }
+  .btn.sm { display: inline-block; width: auto; padding: 8px 14px; font-size: 13px; }
+  .badge { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600; background: #EEF0F2; color: var(--muted); }
+  .badge.good { background: var(--green-tint); color: var(--green-dark); }
+  .badge.warn { background: var(--warn-tint); color: var(--warn); }
+  .badge.bad { background: var(--bad-tint); color: var(--bad); }
+  .badge.info { background: var(--info-tint); color: var(--info); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .prod { background: #fff; border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+  .prod .img { aspect-ratio: 1; background: var(--green-tint); display: flex; align-items: center; justify-content: center; color: var(--green-dark); font-weight: 700; font-size: 28px; }
+  .prod .img img { width: 100%; height: 100%; object-fit: cover; }
+  .prod .b { padding: 10px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .prod .name { font-weight: 600; font-size: 14px; }
+  .prod .btn { margin-top: auto; padding: 9px; font-size: 13px; }
+  .stat { display: flex; justify-content: space-between; align-items: baseline; }
+  .big { font-size: 28px; font-weight: 700; }
+  .bar { height: 10px; border-radius: 999px; background: #EEF0F2; overflow: hidden; margin: 10px 0 6px; }
+  .bar > div { height: 100%; background: var(--green); border-radius: 999px; transition: width .4s; }
+  .steps { display: grid; gap: 8px; margin-top: 10px; }
+  .step { display: flex; justify-content: space-between; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 14px; }
+  .step.hit { border-color: var(--green); background: var(--green-tint); }
+  .list .item { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .list .item:last-child { border-bottom: 0; }
+  .item .top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+  .item .title { font-weight: 600; }
+  .inline { display: flex; gap: 8px; margin-top: 8px; }
+  .inline input { flex: 1; }
+  .code { font-size: 30px; font-weight: 700; letter-spacing: 4px; text-align: center; padding: 12px; background: var(--green-tint); border-radius: 12px; color: var(--green-dark); }
+  nav { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(5, 1fr); padding-bottom: env(safe-area-inset-bottom); z-index: 5; }
+  nav a { text-align: center; padding: 9px 2px 8px; font-size: 11px; color: var(--muted); text-decoration: none; }
+  nav a .i { display: block; font-size: 20px; line-height: 1.2; }
+  nav a.on { color: var(--green-dark); font-weight: 600; }
+  .toast { position: fixed; left: 16px; right: 16px; bottom: 90px; background: #111; color: #fff; padding: 12px 14px; border-radius: 12px; font-size: 14px; z-index: 10; opacity: 0; transform: translateY(10px); transition: .25s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: none; }
+  .toast.err { background: var(--bad); }
+  .center { text-align: center; padding: 40px 16px; }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--green-tint); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .mockbar { background: var(--warn-tint); color: var(--warn); font-size: 12px; padding: 6px 16px; text-align: center; }
+  .empty { text-align: center; color: var(--muted); padding: 24px 0; }
+</style>
+</head>
+<body>
+<div id="mockbar" class="mockbar" hidden>โหมดตัวอย่าง (Prototype) — ข้อมูลจำลอง ไม่ได้เชื่อมระบบจริง</div>
+<header><h1 id="h-title">Affiliate Club</h1><p id="h-sub">กำลังโหลด…</p></header>
+<main id="app"><div class="card center"><div class="spinner"></div><div class="muted">กำลังโหลด…</div></div></main>
+<nav id="nav" hidden>
+  <a data-p="catalog"><span class="i">📦</span>ขอตัวอย่าง</a>
+  <a data-p="requests"><span class="i">🚚</span>พัสดุ/คอนเทนต์</a>
+  <a data-p="me"><span class="i">⭐</span>แต้ม & Bonus</a>
+  <a data-p="rewards"><span class="i">🎁</span>แลกรางวัล</a>
+  <a data-p="invite"><span class="i">🤝</span>ชวนเพื่อน</a>
+</nav>
+<div id="toast" class="toast"></div>
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+/* ===== ตั้งค่า: แก้ 2 บรรทัดนี้หลัง Deploy ===== */
+const LIFF_ID = '2012132241-ifUH9yrd';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwZYpEBmFgLHa85fLGCe_m-_iq3DA_TMjVpmx_ERLBB_S2WpNef7toQzSBE3kNFVFfSIA/exec';
+/* ============================================ */
+
+const PLATFORMS = ['TikTok', 'Shopee', 'Lazada', 'Facebook', 'Instagram', 'YouTube', 'อื่นๆ'];
+const CATEGORIES = ['Beauty', 'Fashion', 'Food', 'Health', 'Gadget', 'Home', 'Mom & Kids'];
+const PAGES = { register: pageRegister, catalog: pageCatalog, requests: pageRequests, me: pageMe, rewards: pageRewards, invite: pageInvite };
+const params = new URLSearchParams(location.search);
+const MOCK = params.get('mock') === '1' || LIFF_ID.startsWith('YOUR_');
+const state = { me: null, page: params.get('page') || 'register', ref: params.get('ref') || '', campaign: params.get('c') || '' };
+
+const $ = s => document.querySelector(s);
+const app = $('#app');
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const fmt = n => Number(n || 0).toLocaleString('th-TH', { maximumFractionDigits: 0 });
+
+function toast(msg, err) {
+  const t = $('#toast'); t.textContent = msg; t.className = 'toast show' + (err ? ' err' : '');
+  clearTimeout(toast.t); toast.t = setTimeout(() => { t.className = 'toast'; }, 2800);
+}
+function loading(msg) { app.innerHTML = `<div class="card center"><div class="spinner"></div><div class="muted">${esc(msg || 'กำลังโหลด…')}</div></div>`; }
+function header(title, sub) { $('#h-title').textContent = title; $('#h-sub').textContent = sub || ''; }
+
+async function api(action, data) {
+  if (MOCK) return mockApi(action, data || {});
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(Object.assign({ action, idToken: liff.getIDToken() }, data || {})),
+  });
+  const j = await res.json();
+  if (!j.ok) throw new Error(j.error || 'เกิดข้อผิดพลาด');
+  return j.data;
+}
+
+async function boot() {
+  try {
+    if (MOCK) { $('#mockbar').hidden = false; }
+    else {
+      await liff.init({ liffId: LIFF_ID });
+      if (!liff.isLoggedIn()) { liff.login({ redirectUri: location.href }); return; }
+      // หลัง init, query เดิมจาก liff.state จะกลับมาอยู่ใน location
+      const p = new URLSearchParams(location.search);
+      state.page = p.get('page') || state.page; state.ref = p.get('ref') || state.ref; state.campaign = p.get('c') || state.campaign;
+    }
+    state.me = await api('me', { ref: state.ref, campaign: state.campaign });
+    $('#h-title').textContent = state.me.brand || 'Affiliate Club';
+    const approved = state.me.affiliate && state.me.affiliate.status === 'approved';
+    if (!approved && state.page !== 'register') state.page = 'register';
+    if (approved && state.page === 'register') state.page = 'me';
+    go(state.page);
+  } catch (e) {
+    app.innerHTML = `<div class="card center"><h2>เปิดหน้าไม่สำเร็จ</h2><p class="muted">${esc(e.message)}</p><button class="btn" onclick="location.reload()">ลองใหม่</button></div>`;
+  }
+}
+
+function go(page) {
+  state.page = PAGES[page] ? page : 'me';
+  const approved = state.me && state.me.affiliate && state.me.affiliate.status === 'approved';
+  $('#nav').hidden = !approved;
+  document.querySelectorAll('nav a').forEach(a => a.classList.toggle('on', a.dataset.p === state.page));
+  window.scrollTo(0, 0);
+  PAGES[state.page]();
+}
+document.querySelectorAll('nav a').forEach(a => a.addEventListener('click', () => go(a.dataset.p)));
+
+async function act(btn, fn) {
+  const label = btn.textContent; btn.disabled = true; btn.textContent = 'กำลังดำเนินการ…';
+  try { await fn(); } catch (e) { toast(e.message, true); btn.disabled = false; btn.textContent = label; }
+}
+
+/* ---------- สมัคร ---------- */
+function pageRegister() {
+  const a = state.me.affiliate;
+  if (a) {
+    const map = { pending: ['รอตรวจสอบ', 'warn', 'ทีมงานกำลังตรวจใบสมัคร จะแจ้งผลทาง LINE'], rejected: ['ไม่ผ่าน', 'bad', 'สอบถามเพิ่มเติมได้ที่แชท'], suspended: ['ระงับชั่วคราว', 'bad', 'ติดต่อแอดมินที่แชท'] };
+    const s = map[a.status] || [a.status, '', ''];
+    header('ใบสมัครของคุณ', a.full_name);
+    app.innerHTML = `<div class="card center"><span class="badge ${s[1]}">${esc(s[0])}</span><h2 style="margin-top:12px">${esc(a.full_name)}</h2><p class="muted">${esc(s[2])}<br>สมัครเมื่อ ${esc(a.registered_at)}</p>
+      ${!MOCK ? '<button class="btn ghost" onclick="liff.closeWindow()">กลับไปที่แชท</button>' : ''}</div>`;
+    return;
+  }
+  header('สมัคร Affiliate', 'ฟรี · รับสินค้าตัวอย่าง · สะสมแต้ม · รับ Bonus ตามยอดขาย');
+  app.innerHTML = `
+  <form class="card" id="f" novalidate>
+    <h2>ข้อมูลผู้สมัคร</h2>
+    ${state.ref || state.me.lead_ref ? `<p class="muted">รหัสผู้แนะนำ: <b>${esc(state.ref || state.me.lead_ref)}</b></p>` : ''}
+    <label>ชื่อ-นามสกุล <span class="req">*</span></label><input name="full_name" autocomplete="name" required>
+    <label>เบอร์โทร <span class="req">*</span></label><input name="phone" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxx" required>
+    <h2 style="margin-top:20px">ช่องทางของคุณ</h2>
+    <label>แพลตฟอร์มหลัก <span class="req">*</span></label>
+    <select name="platform" required><option value="">เลือก…</option>${PLATFORMS.map(p => `<option>${p}</option>`).join('')}</select>
+    <label>ลิงก์ช่อง / โปรไฟล์ <span class="req">*</span></label><input name="channel_url" inputmode="url" placeholder="https://" required>
+    <div class="row2">
+      <div><label>ผู้ติดตาม</label><input name="followers" inputmode="numeric" placeholder="เช่น 12000"></div>
+      <div><label>Username Affiliate</label><input name="platform_affiliate_id" placeholder="ใช้จับคู่ยอดขาย"></div>
+    </div>
+    <label>หมวดสินค้าที่สนใจ</label>
+    <div class="chips" id="cats">${CATEGORIES.map(c => `<span class="chip" data-v="${c}">${c}</span>`).join('')}</div>
+    <h2 style="margin-top:20px">ที่อยู่จัดส่งสินค้าตัวอย่าง</h2>
+    <label>ที่อยู่ <span class="req">*</span></label><textarea name="address" autocomplete="street-address" required></textarea>
+    <div class="row2">
+      <div><label>จังหวัด <span class="req">*</span></label><input name="province" required></div>
+      <div><label>รหัสไปรษณีย์ <span class="req">*</span></label><input name="postcode" inputmode="numeric" maxlength="5" autocomplete="postal-code" required></div>
+    </div>
+    <label class="check" style="margin-top:18px"><input type="checkbox" name="consent"> <span>ยินยอมให้เก็บและใช้ข้อมูลส่วนบุคคล (ชื่อ เบอร์ ที่อยู่) เพื่อดำเนินโปรแกรม Affiliate และจัดส่งสินค้า ตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล</span></label>
+    <button class="btn" style="margin-top:18px" id="submit">ส่งใบสมัคร</button>
+  </form>`;
+  document.querySelectorAll('#cats .chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('on')));
+  $('#f').addEventListener('submit', ev => {
+    ev.preventDefault();
+    const fd = new FormData(ev.target);
+    const form = Object.fromEntries(fd.entries());
+    form.consent = !!fd.get('consent');
+    form.categories = [...document.querySelectorAll('#cats .chip.on')].map(c => c.dataset.v);
+    form.ref = state.ref || state.me.lead_ref || '';
+    act($('#submit'), async () => {
+      const r = await api('register', { form });
+      state.me.affiliate = r.affiliate;
+      toast(r.affiliate.status === 'approved' ? 'อนุมัติแล้ว ยินดีต้อนรับ!' : 'ส่งใบสมัครแล้ว');
+      go(r.affiliate.status === 'approved' ? 'me' : 'register');
+    });
+  });
+}
+
+/* ---------- ขอตัวอย่าง ---------- */
+async function pageCatalog() {
+  header('ขอสินค้าตัวอย่าง', 'เลือกสินค้าที่อยากรีวิว');
+  loading();
+  try {
+    const d = await api('catalog');
+    const q = d.quota;
+    const can = q.remaining > 0 && !d.blocked;
+    app.innerHTML = `
+      <div class="card">
+        <div class="stat"><span class="muted">โควตาเดือนนี้</span><b>${q.used}/${q.limit} ชิ้น</b></div>
+        <div class="bar"><div style="width:${q.limit ? Math.min(100, q.used / q.limit * 100) : 0}%"></div></div>
+        ${d.blocked ? `<p class="badge bad">ยังค้างส่งคอนเทนต์: ${esc(d.overdue.join(', '))}</p><p class="muted">ส่งลิงก์คอนเทนต์ก่อน จึงจะขอชิ้นใหม่ได้</p><button class="btn sm ghost" onclick="go('requests')">ไปส่งลิงก์</button>` :
+          q.remaining ? `<span class="muted">ขอได้อีก ${q.remaining} ชิ้น</span>` : '<span class="muted">ใช้โควตาครบแล้ว รอเดือนหน้านะครับ</span>'}
+      </div>
+      ${d.products.length ? `<div class="grid">${d.products.map(p => `
+        <div class="prod">
+          <div class="img">${p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy">` : '📦'}</div>
+          <div class="b">
+            <span class="name">${esc(p.name)}</span>
+            <span class="muted">${esc(p.category || '')}${p.commission_note ? ' · ' + esc(p.commission_note) : ''}</span>
+            <button class="btn" data-sku="${esc(p.sku)}" ${can ? '' : 'disabled'}>ขอตัวอย่าง</button>
+          </div>
+        </div>`).join('')}</div>` : '<div class="card empty">ยังไม่มีสินค้าให้ขอในตอนนี้</div>'}`;
+    app.querySelectorAll('[data-sku]').forEach(b => b.addEventListener('click', () => act(b, async () => {
+      await api('requestSample', { sku: b.dataset.sku });
+      toast('ส่งคำขอแล้ว ติดตามสถานะได้ที่แชท');
+      pageCatalog();
+    })));
+  } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
+}
+
+/* ---------- พัสดุ / ส่งคอนเทนต์ ---------- */
+const REQ_BADGE = { requested: 'warn', approved: 'info', shipped: 'info', delivered: 'info', content_submitted: 'good', done: 'good', rejected: 'bad' };
+async function pageRequests() {
+  header('พัสดุ & คอนเทนต์', 'ติดตามของ และส่งลิงก์คอนเทนต์เพื่อรับแต้ม');
+  loading();
+  try {
+    const d = await api('requests');
+    if (!d.requests.length) { app.innerHTML = `<div class="card empty">ยังไม่มีคำขอ<br><br><button class="btn sm" onclick="go('catalog')">ขอสินค้าตัวอย่าง</button></div>`; return; }
+    app.innerHTML = `<div class="card list">${d.requests.map(r => `
+      <div class="item">
+        <div class="top"><span class="title">${esc(r.product_name)}</span><span class="badge ${REQ_BADGE[r.status] || ''}">${esc(r.status_th)}</span></div>
+        <div class="muted">ขอเมื่อ ${esc(r.requested_at)}${r.tracking_no ? ` · ${esc(r.carrier)} <b>${esc(r.tracking_no)}</b>` : ''}</div>
+        ${r.content_due && !r.content_url ? `<div class="muted" style="color:${r.overdue ? 'var(--bad)' : ''}">ส่งคอนเทนต์ภายใน ${esc(r.content_due)}${r.overdue ? ' (เลยกำหนด)' : ''}</div>` : ''}
+        ${r.content_url ? `<div class="muted">คอนเทนต์: <a href="${esc(r.content_url)}" target="_blank" rel="noopener">${esc(r.content_url.slice(0, 40))}…</a></div>` : ''}
+        ${r.can_submit ? `<div class="inline"><input placeholder="วางลิงก์โพสต์/คลิป" data-url="${esc(r.request_id)}" inputmode="url"><button class="btn sm" data-req="${esc(r.request_id)}">ส่ง</button></div>` : ''}
+      </div>`).join('')}</div>`;
+    app.querySelectorAll('[data-req]').forEach(b => b.addEventListener('click', () => {
+      const url = app.querySelector(`[data-url="${b.dataset.req}"]`).value.trim();
+      if (!/^https?:\/\//i.test(url)) return toast('ลิงก์ต้องขึ้นต้นด้วย http', true);
+      act(b, async () => { await api('submitContent', { request_id: b.dataset.req, url }); toast('ส่งลิงก์แล้ว รอทีมตรวจเพื่อรับแต้ม'); pageRequests(); });
+    }));
+  } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
+}
+
+/* ---------- แต้ม ยอดขาย Bonus ---------- */
+async function pageMe() {
+  header('แต้ม & Bonus', state.me.affiliate ? state.me.affiliate.full_name : '');
+  loading();
+  try {
+    const d = await api('dashboard');
+    const b = d.bonus, steps = b.steps || [];
+    const top = steps.length ? steps[steps.length - 1].min_sales : 0;
+    const pct = top ? Math.min(100, d.sales_this_month / top * 100) : 0;
+    const TYPE = { register: 'สมัครสำเร็จ', content: 'ส่งคอนเทนต์', checkin: 'เช็กอิน', referral: 'ชวนเพื่อน', redeem: 'แลกรางวัล', refund: 'คืนแต้ม' };
+    app.innerHTML = `
+      <div class="card">
+        <div class="stat"><span class="muted">แต้มสะสม</span><span class="big">${fmt(d.affiliate.points)}</span></div>
+        ${d.points_checkin ? `<button class="btn ${d.checked_in_today ? 'ghost' : ''}" id="checkin" style="margin-top:10px" ${d.checked_in_today ? 'disabled' : ''}>${d.checked_in_today ? 'เช็กอินวันนี้แล้ว ✓' : 'เช็กอินวันนี้ +' + d.points_checkin + ' แต้ม'}</button>` : ''}
+      </div>
+      <div class="card">
+        <h2>Bonus ยอดขายเดือนนี้ (${esc(d.period)})</h2>
+        <div class="stat"><span class="muted">ยอดขาย</span><span class="big">฿${fmt(d.sales_this_month)}</span></div>
+        <div class="bar"><div style="width:${pct}%"></div></div>
+        <div class="muted">${b.next ? `ขายเพิ่มอีก <b>฿${fmt(b.remaining)}</b> ถึงขั้น ${b.next.step} รับ Bonus ${fmt(b.next.bonus)} ${esc(b.unit)}` : (b.current ? 'ถึงขั้นสูงสุดแล้ว 🎉' : '')}</div>
+        <div class="steps">${steps.map(s => `<div class="step ${b.current && s.step <= b.current.step ? 'hit' : ''}"><span>ขั้น ${s.step} · ขาย ฿${fmt(s.min_sales)}+</span><b>+${fmt(s.bonus)} ${esc(b.unit)}</b></div>`).join('')}</div>
+        <p class="muted" style="margin-bottom:0">ยอดเดือนที่แล้ว ฿${fmt(d.sales_last_month)} · ยอดขายอัปเดตเมื่อทีมนำเข้ารายงานจากแพลตฟอร์ม</p>
+      </div>
+      ${d.bonuses.length ? `<div class="card list"><h2>ประวัติ Bonus</h2>${d.bonuses.map(x => `<div class="item"><div class="top"><span>${esc(x.period)} · ขั้น ${esc(x.step)}</span><span class="badge ${x.status === 'paid' ? 'good' : 'warn'}">${esc(x.status_th)}</span></div><div class="muted">ยอดขาย ฿${fmt(x.total_sales)} · Bonus ${fmt(x.bonus)} ${esc(b.unit)}</div></div>`).join('')}</div>` : ''}
+      <div class="card list"><h2>ประวัติแต้ม</h2>${d.activities.length ? d.activities.map(a => `<div class="item"><div class="top"><span>${esc(TYPE[a.type] || a.type)}${a.verified ? '' : ' <span class="badge warn">รอตรวจ</span>'}</span><b style="color:${a.points < 0 ? 'var(--bad)' : 'var(--green-dark)'}">${a.points > 0 ? '+' : ''}${fmt(a.points)}</b></div><div class="muted">${esc(a.date)}</div></div>`).join('') : '<div class="empty">ยังไม่มีรายการ</div>'}</div>`;
+    const c = $('#checkin');
+    if (c && !d.checked_in_today) c.addEventListener('click', () => act(c, async () => { const r = await api('checkin'); toast('+' + r.points + ' แต้ม'); pageMe(); }));
+  } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
+}
+
+/* ---------- แลกรางวัล ---------- */
+async function pageRewards() {
+  header('แลกรางวัล', 'ใช้แต้มสะสมแลกของรางวัล');
+  loading();
+  try {
+    const d = await api('rewards');
+    app.innerHTML = `
+      <div class="card stat"><span class="muted">แต้มที่ใช้ได้</span><span class="big">${fmt(d.points)}</span></div>
+      ${d.rewards.length ? `<div class="grid">${d.rewards.map(r => `
+        <div class="prod"><div class="img">${r.image_url ? `<img src="${esc(r.image_url)}" alt="" loading="lazy">` : '🎁'}</div>
+          <div class="b"><span class="name">${esc(r.name)}</span><span class="muted">${fmt(r.points_cost)} แต้ม · เหลือ ${r.stock}</span>
+          <button class="btn" data-rw="${esc(r.reward_id)}" data-cost="${r.points_cost}" ${d.points >= r.points_cost ? '' : 'disabled'}>${d.points >= r.points_cost ? 'แลก' : 'แต้มไม่พอ'}</button></div></div>`).join('')}</div>` : '<div class="card empty">ยังไม่มีรางวัล</div>'}
+      ${d.redemptions.length ? `<div class="card list" style="margin-top:12px"><h2>รายการที่แลกแล้ว</h2>${d.redemptions.map(x => `<div class="item"><div class="top"><span>${esc(x.reward_name)}</span><span class="badge ${x.status === 'shipped' ? 'good' : x.status === 'rejected' ? 'bad' : 'warn'}">${esc(x.status_th)}</span></div><div class="muted">${esc(x.date)} · ${fmt(x.points_cost)} แต้ม</div></div>`).join('')}</div>` : ''}`;
+    app.querySelectorAll('[data-rw]').forEach(b => b.addEventListener('click', () => {
+      if (!confirm('ยืนยันใช้ ' + fmt(b.dataset.cost) + ' แต้ม?')) return;
+      act(b, async () => { await api('redeem', { reward_id: b.dataset.rw }); toast('แลกสำเร็จ ทีมจะจัดส่งให้'); pageRewards(); });
+    }));
+  } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
+}
+
+/* ---------- ชวนเพื่อน ---------- */
+function pageInvite() {
+  const a = state.me.affiliate;
+  header('ชวนเพื่อน', 'เพื่อนสมัครและได้รับอนุมัติ คุณรับแต้มเพิ่ม');
+  const link = `https://liff.line.me/${LIFF_ID}?page=register&ref=${encodeURIComponent(a.my_ref_code || '')}`;
+  app.innerHTML = `
+    <div class="card">
+      <p class="muted" style="margin-top:0">รหัสชวนเพื่อนของคุณ</p>
+      <div class="code">${esc(a.my_ref_code || '-')}</div>
+      <button class="btn" id="share" style="margin-top:14px">ส่งคำเชิญให้เพื่อนใน LINE</button>
+      <button class="btn ghost" id="copy" style="margin-top:8px">คัดลอกลิงก์</button>
+      <p class="muted" style="margin-bottom:0">ลิงก์จะพาเพื่อนเพิ่มเพื่อน OA และเปิดฟอร์มสมัครพร้อมรหัสของคุณ</p>
+    </div>`;
+  $('#copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(link); toast('คัดลอกลิงก์แล้ว'); } catch (e) { prompt('คัดลอกลิงก์นี้', link); }
+  });
+  $('#share').addEventListener('click', async () => {
+    const msg = { type: 'text', text: `มาเป็น Affiliate ด้วยกัน! รับสินค้าตัวอย่างฟรี สะสมแต้ม และรับ Bonus ตามยอดขาย\nสมัครที่นี่ 👉 ${link}` };
+    if (!MOCK && liff.isApiAvailable && liff.isApiAvailable('shareTargetPicker')) {
+      try { const r = await liff.shareTargetPicker([msg]); if (r) toast('ส่งคำเชิญแล้ว'); } catch (e) { toast(e.message, true); }
+    } else { toast('ฟีเจอร์นี้ใช้ได้ในแอป LINE — ใช้ปุ่มคัดลอกลิงก์แทน'); }
+  });
+}
+
+/* ---------- Mock API (โหมด Prototype) ---------- */
+const MOCKDB = {
+  aff: null, points: 0,
+  products: [
+    { sku: 'S1', name: 'เซรั่มวิตามินซี 30ml', category: 'Beauty', image_url: '', stock: 12, commission_note: 'คอมฯ 12%' },
+    { sku: 'S2', name: 'กราโนล่าโฮลเกรน', category: 'Food', image_url: '', stock: 8, commission_note: 'คอมฯ 8%' },
+    { sku: 'S3', name: 'หูฟังไร้สาย Lite', category: 'Gadget', image_url: '', stock: 3, commission_note: 'คอมฯ 6%' },
+    { sku: 'S4', name: 'ครีมกันแดด SPF50', category: 'Beauty', image_url: '', stock: 20, commission_note: 'คอมฯ 10%' },
+  ],
+  requests: [], acts: [], redemptions: [], checkin: false,
+  rewards: [{ reward_id: 'R1', name: 'บัตรกำนัล 100 บาท', points_cost: 500, stock: 20 }, { reward_id: 'R2', name: 'เซ็ตสินค้าพรีเมียม', points_cost: 1500, stock: 5 }],
+  steps: [{ step: 1, min_sales: 10000, bonus: 300 }, { step: 2, min_sales: 30000, bonus: 1200 }, { step: 3, min_sales: 80000, bonus: 4000 }],
+};
+function mockApi(action, d) {
+  const db = MOCKDB, wait = v => new Promise(r => setTimeout(() => r(v), 250));
+  const fail = m => new Promise((_, j) => setTimeout(() => j(new Error(m)), 250));
+  const addPts = (type, p) => { db.points += p; db.acts.unshift({ type, points: p, verified: true, date: 'วันนี้' }); };
+  const pub = () => db.aff && Object.assign({}, db.aff, { points: db.points });
+  switch (action) {
+    case 'me': return wait({ name: 'ผู้ทดสอบ', lead_ref: d.ref || '', affiliate: pub(), brand: 'Affiliate Club' });
+    case 'register': {
+      const f = d.form;
+      for (const k of ['full_name', 'phone', 'platform', 'channel_url', 'address', 'province', 'postcode']) if (!String(f[k] || '').trim()) return fail('กรุณากรอกข้อมูลที่มี * ให้ครบ');
+      if (!f.consent) return fail('กรุณายินยอมให้เก็บข้อมูลส่วนบุคคล');
+      db.aff = { affiliate_id: 'AF-DEMO', full_name: f.full_name, platform: f.platform, status: 'approved', my_ref_code: 'K7Q2MX', registered_at: 'วันนี้' };
+      addPts('register', 50);
+      return wait({ affiliate: pub() });
+    }
+    case 'catalog': {
+      const used = db.requests.filter(r => r.status !== 'rejected').length;
+      return wait({ products: db.products, quota: { limit: 2, used, remaining: Math.max(0, 2 - used) }, blocked: false, overdue: [] });
+    }
+    case 'requestSample': {
+      if (db.requests.length >= 2) return fail('ใช้โควตาเดือนนี้ครบแล้ว (2 ชิ้น)');
+      const p = db.products.find(x => x.sku === d.sku);
+      if (db.requests.some(r => r.sku === d.sku)) return fail('คุณขอสินค้านี้ไว้แล้ว รอดำเนินการอยู่');
+      const shipped = db.requests.length === 0;
+      db.requests.unshift({ request_id: 'RQ' + Date.now(), sku: p.sku, product_name: p.name, status: shipped ? 'shipped' : 'requested',
+        status_th: shipped ? 'จัดส่งแล้ว' : 'รออนุมัติ', carrier: shipped ? 'Kerry' : '', tracking_no: shipped ? 'KEX1234567890' : '',
+        requested_at: 'วันนี้', content_due: shipped ? 'อีก 7 วัน' : '', content_url: '', can_submit: shipped, overdue: false });
+      return wait({});
+    }
+    case 'requests': return wait({ requests: db.requests });
+    case 'submitContent': {
+      const r = db.requests.find(x => x.request_id === d.request_id);
+      Object.assign(r, { content_url: d.url, status: 'content_submitted', status_th: 'ส่งคอนเทนต์แล้ว', can_submit: false });
+      db.acts.unshift({ type: 'content', points: 100, verified: false, date: 'วันนี้' });
+      return wait({});
+    }
+    case 'dashboard': {
+      const sales = 18400, steps = db.steps;
+      const current = steps.filter(s => sales >= s.min_sales).pop() || null, next = steps.find(s => sales < s.min_sales) || null;
+      return wait({ affiliate: pub(), period: '2026-10', sales_this_month: sales, sales_last_month: 9200,
+        bonus: { steps, current, next, remaining: next ? next.min_sales - sales : 0, unit: 'บาท' },
+        bonuses: [{ period: '2026-09', total_sales: 32500, step: 2, bonus: 1200, status: 'paid', status_th: 'จ่ายแล้ว' }],
+        activities: db.acts, checked_in_today: db.checkin, points_checkin: 5 });
+    }
+    case 'checkin': if (db.checkin) return fail('วันนี้เช็กอินแล้ว'); db.checkin = true; addPts('checkin', 5); return wait({ points: 5 });
+    case 'rewards': return wait({ points: db.points, rewards: db.rewards, redemptions: db.redemptions });
+    case 'redeem': {
+      const r = db.rewards.find(x => x.reward_id === d.reward_id);
+      if (db.points < r.points_cost) return fail('แต้มไม่พอ');
+      addPts('redeem', -r.points_cost); r.stock--;
+      db.redemptions.unshift({ reward_name: r.name, points_cost: r.points_cost, status: 'pending', status_th: 'รอจัดส่ง', date: 'วันนี้' });
+      return wait({});
+    }
+  }
+  return fail('unknown action');
+}
+
+boot();
+</script>
+</body>
+</html>
