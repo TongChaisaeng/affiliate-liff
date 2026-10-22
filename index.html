@@ -169,6 +169,23 @@
   .lb .row.me { background: var(--green-tint); margin: 0 -10px; padding: 11px 10px; border-radius: 14px; border-bottom-color: transparent; }
   .lb .row.me .rk { background: var(--green); color: #fff; }
 
+  /* ===== Boost Program ===== */
+  .boost-hero { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 26px; padding: 22px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(0,90,80,.28); }
+  .boost-hero::after { content: ''; position: absolute; width: 230px; height: 230px; border-radius: 50%; background: var(--green-dark); right: -60px; top: -40px; }
+  .boost-hero > * { position: relative; z-index: 1; }
+  .boost-hero .kick { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+  .boost-hero .big11 { font-size: 64px; line-height: 1; font-weight: 700; letter-spacing: -.02em; margin: 6px 0 2px; }
+  .boost-hero .ttl { font-size: 22px; font-weight: 700; }
+  .boost-hero .chips2 { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .boost-hero .pill { background: #fff; color: var(--green-dark); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 700; }
+  .boost-hero .pill.o { background: var(--green-dark); color: #fff; }
+  .boost-hero .comm { position: absolute; right: 22px; top: 22px; text-align: right; }
+  .boost-hero .comm b { display: block; font-size: 40px; line-height: 1; }
+  .boost-hero .comm span { font-size: 12px; opacity: .9; }
+  .details { white-space: pre-line; font-size: 14px; line-height: 1.7; }
+  .joined { display: flex; align-items: center; gap: 12px; background: var(--green-tint); color: var(--green-dark); border-radius: 18px; padding: 14px 16px; font-weight: 600; }
+  .joined .ok { width: 34px; height: 34px; flex: none; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; font-size: 18px; }
+
   /* ===== Tab bar — แคปซูลลอย ===== */
   nav { position: fixed; left: 14px; right: 14px; bottom: calc(12px + env(safe-area-inset-bottom)); border-radius: 32px; display: grid; grid-template-columns: repeat(6, 1fr); padding: 6px; z-index: 5; }
   nav[hidden] { display: none; }
@@ -232,7 +249,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbwZYpEBmFgLHa85fLGCe_m-
 
 const PLATFORMS = ['TikTok', 'Shopee', 'Lazada', 'Facebook', 'Instagram', 'YouTube', 'อื่นๆ'];
 const CATEGORIES = ['Beauty', 'Fashion', 'Food', 'Health', 'Gadget', 'Home', 'Mom & Kids'];
-const PAGES = { register: pageRegister, catalog: pageCatalog, requests: pageRequests, me: pageMe, leaderboard: pageLeaderboard, rewards: pageRewards, invite: pageInvite };
+const PAGES = { register: pageRegister, catalog: pageCatalog, requests: pageRequests, me: pageMe, leaderboard: pageLeaderboard, boost: pageBoost, rewards: pageRewards, invite: pageInvite };
 const params = new URLSearchParams(location.search);
 const MOCK = params.get('mock') === '1' || LIFF_ID.startsWith('YOUR_');
 const state = { me: null, page: params.get('page') || 'register', ref: params.get('ref') || '', campaign: params.get('c') || '' };
@@ -274,7 +291,7 @@ async function boot() {
     state.me = await api('me', { ref: state.ref, campaign: state.campaign });
     $('#h-title').textContent = state.me.brand || 'Affiliate Club';
     const approved = state.me.affiliate && state.me.affiliate.status === 'approved';
-    if (!approved && state.page !== 'register') state.page = 'register';
+    if (!approved && state.page !== 'register' && state.page !== 'boost') state.page = 'register';
     if (approved && state.page === 'register') state.page = 'me';
     go(state.page);
   } catch (e) {
@@ -470,6 +487,39 @@ async function pageLeaderboard(by) {
   } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
 }
 
+/* ---------- Program Boost up 11.11 ---------- */
+async function pageBoost() {
+  header('Boost up 11.11', 'โปรแกรมพิเศษ รับค่าคอมเพิ่ม');
+  loading();
+  try {
+    const d = await api('program');
+    const p = d.program;
+    if (!p) { app.innerHTML = '<div class="card empty">ยังไม่มีโปรแกรมที่เปิดอยู่ตอนนี้</div>'; return; }
+    header(p.title, 'โปรแกรมพิเศษ รับค่าคอมเพิ่ม');
+    const ST = { open: 'เปิดรับแล้ว', upcoming: 'ลงทะเบียนล่วงหน้า', ended: 'จบโปรแกรมแล้ว' };
+    const m = String(p.title).match(/\d+\.\d+/);
+    let cta;
+    if (d.joined) cta = `<div class="joined"><span class="ok">✓</span><div>คุณเข้าร่วมโปรแกรมแล้ว<div class="muted" style="font-weight:400">เมื่อ ${esc(d.joined_at)} · ทีมงานจะแจ้งรายละเอียดทาง LINE</div></div></div>`;
+    else if (p.state === 'ended') cta = '<button class="btn" disabled>ปิดรับแล้ว</button>';
+    else if (d.member_status === 'approved') cta = '<button class="btn" id="join">เข้าร่วม Program รับค่าคอมเพิ่ม</button>';
+    else if (d.member_status === 'pending') cta = '<button class="btn" disabled>รออนุมัติสมาชิก — เข้าร่วมได้หลังอนุมัติ</button>';
+    else cta = '<button class="btn" id="toreg">สมัครสมาชิก Affiliate ก่อน (ฟรี)</button><p class="muted" style="text-align:center">เฉพาะสมาชิก Affiliate Club ที่ได้รับอนุมัติ</p>';
+    app.innerHTML = `
+      <div class="boost-hero">
+        <div class="kick">Dentiste' · Affiliate Club</div>
+        <div class="big11">${esc(m ? m[0] : '')}</div>
+        <div class="ttl">${esc(p.title)}</div>
+        ${p.extra_commission ? `<div class="comm"><span>ค่าคอมเพิ่ม</span><b>${esc(p.extra_commission)}</b></div>` : ''}
+        <div class="chips2"><span class="pill">${esc(ST[p.state] || '')}</span>${p.start ? `<span class="pill o">${esc(p.start)} – ${esc(p.end)}</span>` : ''}</div>
+      </div>
+      <div style="margin-bottom:14px">${cta}</div>
+      <div class="card"><h2>${esc(p.headline || 'รายละเอียดโปรแกรม')}</h2><div class="details">${esc(p.details || '')}</div>
+        ${d.total_joined ? `<p class="muted" style="margin-bottom:0">เข้าร่วมแล้ว ${fmt(d.total_joined)} คน</p>` : ''}</div>`;
+    const j = $('#join'); if (j) j.addEventListener('click', () => act(j, async () => { await api('joinProgram', { program_id: p.program_id }); toast('เข้าร่วมโปรแกรมแล้ว 🚀'); pageBoost(); }));
+    const g = $('#toreg'); if (g) g.addEventListener('click', () => go('register'));
+  } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
+}
+
 /* ---------- แลกรางวัล ---------- */
 async function pageRewards() {
   header('แลกรางวัล', 'ใช้แต้มสะสมแลกของรางวัล');
@@ -578,6 +628,10 @@ function mockApi(action, d) {
       const rows = names.map(n => ({ name: n[0], platform: n[1], value: pts ? n[3] : n[2], me: n[0] === 'คุณ' })).sort((a, b) => b.value - a.value).map((r, i) => Object.assign(r, { rank: i + 1 }));
       return wait({ by: pts ? 'points' : 'sales', period: '2026-10', total: 128, top: rows, me: rows.find(r => r.me) });
     }
+    case 'program': return wait({ program: { program_id: 'BOOST1111', title: 'Boost up 11.11', headline: 'เข้าร่วมโปรแกรม รับค่าคอมเพิ่มช่วงแคมเปญ 11.11', extra_commission: '+5%', start: '1 พ.ย. 2026', end: '15 พ.ย. 2026', state: 'upcoming',
+      details: '• รับค่าคอมมิชชั่นเพิ่มจากปกติ สำหรับยอดขายสินค้า Dentiste\' ช่วงแคมเปญ\n• ต้องกดเข้าร่วมก่อนแคมเปญจบ ยอดขายนับตั้งแต่วันที่เริ่มแคมเปญ\n• ค่าคอมส่วนเพิ่มจ่ายพร้อมรอบ Bonus เดือนถัดไป' },
+      member_status: db.aff ? db.aff.status : 'none', joined: !!db.boost, joined_at: db.boost ? 'วันนี้' : '', total_joined: 37 + (db.boost ? 1 : 0) });
+    case 'joinProgram': if (db.boost) return fail('คุณเข้าร่วมโปรแกรมนี้แล้ว'); db.boost = true; return wait({ joined: true });
     case 'rewards': return wait({ points: db.points, rewards: db.rewards, redemptions: db.redemptions });
     case 'redeem': {
       const r = db.rewards.find(x => x.reward_id === d.reward_id);
