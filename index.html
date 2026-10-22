@@ -7,88 +7,171 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+  /* ===== Dentiste' CI ===== */
   :root {
-    --green: #00786A; --green-dark: #005A50; --green-tint: #E6F2F0;
-    --ink: #1A1A1A; --muted: #6B7280; --line: #E5E7EB; --bg: #F5F6F7; --card: #FFFFFF;
-    --warn: #B45309; --warn-tint: #FEF3C7; --bad: #B91C1C; --bad-tint: #FEE2E2; --info: #1D4ED8; --info-tint: #DBEAFE;
-    --radius: 14px;
+    color-scheme: light;
+    --green: #00786A; --green-dark: #005A50; --green-tint: #E6F2F0; --green-hi: #12A08F;
+    --ink: #0F2A26; --muted: #5B6B68; --line: rgba(0, 90, 80, .12);
+    --warn: #B45309; --warn-tint: rgba(254, 243, 199, .85); --bad: #B91C1C; --bad-tint: rgba(254, 226, 226, .85); --info: #1D4ED8; --info-tint: rgba(219, 234, 254, .85);
+    --radius: 24px;
+    /* Liquid Glass recipe */
+    --glass-fill: rgba(255, 255, 255, .52);
+    --glass-edge: rgba(255, 255, 255, .75);
+    --glass-blur: blur(22px) saturate(185%);
+    --glass-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.35), 0 10px 30px rgba(0, 90, 80, .12), 0 1px 2px rgba(0, 90, 80, .08);
+    --fill-soft: rgba(255, 255, 255, .62);
   }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans Thai', system-ui, sans-serif; font-size: 15px; line-height: 1.5; }
-  body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
-  header { background: var(--green); color: #fff; padding: 18px 16px 22px; }
-  header h1 { margin: 0; font-size: 20px; font-weight: 700; }
-  header p { margin: 2px 0 0; opacity: .9; font-size: 13px; }
-  main { padding: 0 16px; margin-top: -10px; }
-  .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
-  .card h2 { margin: 0 0 8px; font-size: 16px; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; color: var(--ink); font-family: 'Noto Sans Thai', -apple-system, system-ui, sans-serif; font-size: 15px; line-height: 1.5; }
+  html { background: #E9F3F1; }
+  body { min-height: 100vh; padding-bottom: calc(104px + env(safe-area-inset-bottom)); }
+
+  /* ===== พื้นหลังให้กระจกมีอะไรหักเห (Brand ambient) ===== */
+  .ambient { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: linear-gradient(180deg, #DCEFEB 0%, #F2F8F7 55%, #E4F1EE 100%); }
+  .ambient i { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .75; }
+  .ambient i:nth-child(1) { width: 340px; height: 340px; left: -110px; top: -120px; background: #00786A; opacity: .55; }
+  .ambient i:nth-child(2) { width: 300px; height: 300px; right: -120px; top: 140px; background: #5CC8B8; }
+  .ambient i:nth-child(3) { width: 360px; height: 360px; left: 10%; bottom: -160px; background: #9ADBD0; }
+  .ambient i:nth-child(4) { width: 180px; height: 180px; right: 12%; bottom: 22%; background: #FFFFFF; opacity: .9; }
+
+  /* ===== วัสดุกระจก ===== */
+  .glass, .card, .prod, nav, .mockbar, .toast {
+    position: relative; background: var(--glass-fill);
+    -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-edge); box-shadow: var(--glass-shadow);
+  }
+  /* แสงสะท้อน specular ขอบบน */
+  .card::before, .prod::before, nav::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: linear-gradient(160deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,0) 70%, rgba(255,255,255,.18) 100%);
+  }
+  .card > *, .prod > * { position: relative; }
+
+  /* ===== Header — Large title แบบ iOS ===== */
+  header { padding: calc(22px + env(safe-area-inset-top)) 20px 18px; }
+  header .brand { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 6px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--green-dark); }
+  header .brand .dot { width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(145deg, var(--green-hi), var(--green-dark)); box-shadow: inset 0 1px 0 rgba(255,255,255,.6); display: grid; place-items: center; color: #fff; font-size: 11px; letter-spacing: 0; }
+  header h1 { margin: 12px 0 0; font-size: 30px; line-height: 1.2; font-weight: 700; letter-spacing: -.01em; color: var(--green-dark); }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+  main { padding: 0 16px; }
+
+  /* ===== Card ===== */
+  .card { border-radius: var(--radius); padding: 18px; margin-bottom: 14px; }
+  .card h2 { margin: 0 0 10px; font-size: 17px; font-weight: 700; color: var(--green-dark); }
   .muted { color: var(--muted); font-size: 13px; }
-  label { display: block; font-weight: 600; font-size: 14px; margin: 14px 0 6px; }
+
+  /* ===== Form ===== */
+  label { display: block; font-weight: 600; font-size: 14px; margin: 16px 0 6px; }
   label .req { color: var(--bad); }
-  input, select, textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px; font: inherit; background: #fff; color: var(--ink); }
-  input:focus, select:focus, textarea:focus { outline: 2px solid var(--green); border-color: transparent; }
-  textarea { min-height: 72px; resize: vertical; }
+  input, select, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; font: inherit; background: var(--fill-soft); color: var(--ink); box-shadow: inset 0 1px 2px rgba(0,90,80,.06); transition: box-shadow .2s, border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
+  select { background-image: linear-gradient(45deg, transparent 50%, var(--green) 50%), linear-gradient(135deg, var(--green) 50%, transparent 50%); background-position: calc(100% - 20px) 52%, calc(100% - 15px) 52%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 36px; }
+  input:focus, select:focus, textarea:focus { outline: none; background-color: rgba(255,255,255,.9); border-color: rgba(0,120,106,.55); box-shadow: 0 0 0 4px rgba(0,120,106,.16); }
+  textarea { min-height: 76px; resize: vertical; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 13px; cursor: pointer; user-select: none; }
-  .chip.on { background: var(--green-tint); border-color: var(--green); color: var(--green-dark); font-weight: 600; }
+  .chip { border: 1px solid var(--line); background: var(--fill-soft); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; user-select: none; transition: transform .15s, background .2s; }
+  .chip:active { transform: scale(.96); }
+  .chip.on { background: linear-gradient(145deg, var(--green-hi), var(--green)); border-color: transparent; color: #fff; font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 4px 12px rgba(0,120,106,.25); }
   .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; font-size: 13px; }
-  .check input { width: 20px; height: 20px; margin-top: 2px; flex: none; }
-  .btn { display: block; width: 100%; border: 0; border-radius: 12px; padding: 13px; font: inherit; font-weight: 700; background: var(--green); color: #fff; cursor: pointer; text-align: center; text-decoration: none; }
-  .btn:active { background: var(--green-dark); }
-  .btn[disabled] { background: #C7CDD3; cursor: not-allowed; }
-  .btn.ghost { background: #fff; color: var(--green-dark); border: 1px solid var(--green); }
-  .btn.sm { display: inline-block; width: auto; padding: 8px 14px; font-size: 13px; }
-  .badge { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600; background: #EEF0F2; color: var(--muted); }
-  .badge.good { background: var(--green-tint); color: var(--green-dark); }
+  .check input { width: 22px; height: 22px; margin-top: 1px; flex: none; padding: 0; border-radius: 7px; display: grid; place-items: center; }
+  .check input:checked { background: var(--green); border-color: var(--green); }
+  .check input:checked::after { content: ''; width: 6px; height: 11px; border: solid #fff; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
+
+  /* ===== ปุ่ม — capsule, teal glass tint ===== */
+  .btn { display: block; width: 100%; border: 0; border-radius: 999px; padding: 14px; font: inherit; font-weight: 700; color: #fff; cursor: pointer; text-align: center; text-decoration: none;
+    background: linear-gradient(180deg, var(--green-hi) 0%, var(--green) 55%, var(--green-dark) 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 4px rgba(0,40,35,.25), 0 8px 20px rgba(0,120,106,.28);
+    transition: transform .15s, box-shadow .2s, filter .2s; }
+  .btn:active { transform: scale(.97); filter: brightness(.95); }
+  .btn[disabled] { background: rgba(120, 140, 137, .28); color: rgba(15,42,38,.45); box-shadow: inset 0 1px 0 rgba(255,255,255,.6); cursor: not-allowed; transform: none; }
+  .btn.ghost { background: var(--fill-soft); color: var(--green-dark); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 0 0 1px rgba(0,120,106,.35); }
+  .btn.ghost[disabled] { color: var(--green-dark); opacity: 1; background: rgba(230,242,240,.7); }
+  .btn.sm { display: inline-block; width: auto; padding: 8px 16px; font-size: 13px; }
+
+  /* ===== Badge ===== */
+  .badge { display: inline-block; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,.7); color: var(--muted); border: 1px solid rgba(255,255,255,.8); }
+  .badge.good { background: rgba(0,120,106,.12); color: var(--green-dark); border-color: rgba(0,120,106,.18); }
   .badge.warn { background: var(--warn-tint); color: var(--warn); }
   .badge.bad { background: var(--bad-tint); color: var(--bad); }
   .badge.info { background: var(--info-tint); color: var(--info); }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .prod { background: #fff; border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
-  .prod .img { aspect-ratio: 1; background: var(--green-tint); display: flex; align-items: center; justify-content: center; color: var(--green-dark); font-weight: 700; font-size: 28px; }
+
+  /* ===== สินค้า / รางวัล ===== */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .prod { border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+  .prod .img { margin: 8px 8px 0; border-radius: 18px; overflow: hidden; aspect-ratio: 1; background: linear-gradient(150deg, rgba(0,120,106,.18), rgba(92,200,184,.12)); display: flex; align-items: center; justify-content: center; font-size: 34px; }
   .prod .img img { width: 100%; height: 100%; object-fit: cover; }
-  .prod .b { padding: 10px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .prod .b { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
   .prod .name { font-weight: 600; font-size: 14px; }
-  .prod .btn { margin-top: auto; padding: 9px; font-size: 13px; }
+  .prod .btn { margin-top: auto; padding: 10px; font-size: 13px; }
+
+  /* ===== ตัวเลข / Progress ===== */
   .stat { display: flex; justify-content: space-between; align-items: baseline; }
-  .big { font-size: 28px; font-weight: 700; }
-  .bar { height: 10px; border-radius: 999px; background: #EEF0F2; overflow: hidden; margin: 10px 0 6px; }
-  .bar > div { height: 100%; background: var(--green); border-radius: 999px; transition: width .4s; }
-  .steps { display: grid; gap: 8px; margin-top: 10px; }
-  .step { display: flex; justify-content: space-between; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 14px; }
-  .step.hit { border-color: var(--green); background: var(--green-tint); }
-  .list .item { padding: 12px 0; border-bottom: 1px solid var(--line); }
-  .list .item:last-child { border-bottom: 0; }
+  .big { font-size: 32px; font-weight: 700; color: var(--green-dark); letter-spacing: -.01em; }
+  .bar { height: 12px; border-radius: 999px; background: rgba(0,90,80,.08); box-shadow: inset 0 1px 2px rgba(0,90,80,.12); overflow: hidden; margin: 12px 0 8px; }
+  .bar > div { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--green), var(--green-hi)); box-shadow: inset 0 1px 0 rgba(255,255,255,.5); transition: width .5s cubic-bezier(.2,.8,.2,1); }
+  .steps { display: grid; gap: 8px; margin-top: 12px; }
+  .step { display: flex; justify-content: space-between; padding: 11px 14px; border-radius: 16px; font-size: 14px; background: rgba(255,255,255,.45); border: 1px solid var(--line); }
+  .step.hit { background: rgba(0,120,106,.12); border-color: rgba(0,120,106,.35); color: var(--green-dark); }
+
+  /* ===== List ===== */
+  .list .item { padding: 13px 0; border-bottom: 1px solid var(--line); }
+  .list .item:last-child { border-bottom: 0; padding-bottom: 2px; }
   .item .top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
   .item .title { font-weight: 600; }
-  .inline { display: flex; gap: 8px; margin-top: 8px; }
+  .inline { display: flex; gap: 8px; margin-top: 10px; }
   .inline input { flex: 1; }
-  .code { font-size: 30px; font-weight: 700; letter-spacing: 4px; text-align: center; padding: 12px; background: var(--green-tint); border-radius: 12px; color: var(--green-dark); }
-  nav { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(5, 1fr); padding-bottom: env(safe-area-inset-bottom); z-index: 5; }
-  nav a { text-align: center; padding: 9px 2px 8px; font-size: 11px; color: var(--muted); text-decoration: none; }
-  nav a .i { display: block; font-size: 20px; line-height: 1.2; }
-  nav a.on { color: var(--green-dark); font-weight: 600; }
-  .toast { position: fixed; left: 16px; right: 16px; bottom: 90px; background: #111; color: #fff; padding: 12px 14px; border-radius: 12px; font-size: 14px; z-index: 10; opacity: 0; transform: translateY(10px); transition: .25s; pointer-events: none; }
+  .code { font-size: 32px; font-weight: 700; letter-spacing: 6px; text-align: center; padding: 16px; border-radius: 18px; color: var(--green-dark); background: linear-gradient(150deg, rgba(0,120,106,.14), rgba(255,255,255,.55)); border: 1px solid rgba(255,255,255,.8); box-shadow: inset 0 1px 0 rgba(255,255,255,.9); }
+
+  /* ===== Tab bar — แคปซูลลอย ===== */
+  nav { position: fixed; left: 14px; right: 14px; bottom: calc(12px + env(safe-area-inset-bottom)); border-radius: 32px; display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px; z-index: 5; }
+  nav[hidden] { display: none; }
+  nav a { position: relative; z-index: 1; text-align: center; padding: 7px 2px 6px; border-radius: 24px; font-size: 10.5px; line-height: 1.25; color: var(--muted); text-decoration: none; cursor: pointer; transition: background .25s, color .25s, transform .15s; }
+  nav a:active { transform: scale(.94); }
+  nav a svg { display: block; width: 24px; height: 24px; margin: 0 auto 2px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  nav a.on { color: var(--green-dark); font-weight: 700; background: rgba(0,120,106,.13); box-shadow: inset 0 1px 0 rgba(255,255,255,.7); }
+
+  /* ===== Toast / Mock bar ===== */
+  .toast { position: fixed; left: 16px; right: 16px; bottom: calc(100px + env(safe-area-inset-bottom)); background: rgba(15, 42, 38, .72); border-color: rgba(255,255,255,.18); color: #fff; padding: 13px 16px; border-radius: 20px; font-size: 14px; z-index: 10; opacity: 0; transform: translateY(12px) scale(.98); transition: .3s cubic-bezier(.2,.8,.2,1); pointer-events: none; }
   .toast.show { opacity: 1; transform: none; }
-  .toast.err { background: var(--bad); }
-  .center { text-align: center; padding: 40px 16px; }
-  .spinner { width: 32px; height: 32px; border: 3px solid var(--green-tint); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+  .toast.err { background: rgba(185, 28, 28, .82); }
+  .mockbar { margin: calc(10px + env(safe-area-inset-top)) 16px -6px; border-radius: 999px; color: var(--warn); font-size: 12px; padding: 6px 14px; text-align: center; }
+  .mockbar[hidden] { display: none; }
+
+  .center { text-align: center; padding: 40px 18px; }
+  .spinner { width: 34px; height: 34px; border: 3px solid rgba(0,120,106,.15); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .mockbar { background: var(--warn-tint); color: var(--warn); font-size: 12px; padding: 6px 16px; text-align: center; }
   .empty { text-align: center; color: var(--muted); padding: 24px 0; }
+  a { color: var(--green); }
+
+  /* ===== Fallback & Accessibility ===== */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .card, .prod, nav, .mockbar { background: rgba(255,255,255,.92); }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .card, .prod, nav, .mockbar { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .toast { background: #0F2A26; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .ambient i { display: none; }
+  }
+  @media (prefers-contrast: more) {
+    :root { --glass-fill: rgba(255,255,255,.9); --line: rgba(0,90,80,.35); --muted: #3B4A47; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
+<div class="ambient" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div id="mockbar" class="mockbar" hidden>โหมดตัวอย่าง (Prototype) — ข้อมูลจำลอง ไม่ได้เชื่อมระบบจริง</div>
-<header><h1 id="h-title">Affiliate Club</h1><p id="h-sub">กำลังโหลด…</p></header>
+<header>
+  <span class="brand glass"><span class="dot">D</span>Dentiste' · Affiliate Club</span>
+  <h1 id="h-title">Affiliate Club</h1><p id="h-sub">กำลังโหลด…</p>
+</header>
 <main id="app"><div class="card center"><div class="spinner"></div><div class="muted">กำลังโหลด…</div></div></main>
 <nav id="nav" hidden>
-  <a data-p="catalog"><span class="i">📦</span>ขอตัวอย่าง</a>
-  <a data-p="requests"><span class="i">🚚</span>พัสดุ/คอนเทนต์</a>
-  <a data-p="me"><span class="i">⭐</span>แต้ม & Bonus</a>
-  <a data-p="rewards"><span class="i">🎁</span>แลกรางวัล</a>
-  <a data-p="invite"><span class="i">🤝</span>ชวนเพื่อน</a>
+  <a data-p="catalog"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>ขอตัวอย่าง</a>
+  <a data-p="requests"><svg viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8z"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>พัสดุ</a>
+  <a data-p="me"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>แต้ม & Bonus</a>
+  <a data-p="rewards"><svg viewBox="0 0 24 24"><path d="M4 11h16v10H4zM3 7h18v4H3zM12 7v14"/><path d="M12 7c-1.5-3-5-3.5-5-1.2C7 7 9 7 12 7c3 0 5 0 5-1.2C17 3.5 13.5 4 12 7z"/></svg>แลกรางวัล</a>
+  <a data-p="invite"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M18 8v6M15 11h6"/></svg>ชวนเพื่อน</a>
 </nav>
 <div id="toast" class="toast"></div>
 
