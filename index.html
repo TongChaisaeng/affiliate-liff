@@ -3,35 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Affiliate Club</title>
+<title>Dentiste Affiliate+</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ===== Dentiste' CI ===== */
+  /* ฟอนต์ตาม CI: อังกฤษ Manrope / ไทย DB Helvethaica (ใช้ได้เมื่อเครื่องมีฟอนต์หรือใส่ไฟล์ฟอนต์ที่มีลิขสิทธิ์) — สำรองด้วย Noto Sans Thai */
   :root {
     color-scheme: light;
-    --green: #00786A; --green-dark: #005A50; --green-tint: #E6F2F0; --green-hi: #12A08F;
-    --ink: #0F2A26; --muted: #5B6B68; --line: rgba(0, 90, 80, .12);
+    --font: 'Manrope', 'DB Helvethaica X', 'DB HelvethaicaX', 'DB Helvethaica', 'Noto Sans Thai', -apple-system, system-ui, sans-serif;
+    --green: #007864; --green-dark: #005A4B; --green-tint: #E6F2EF; --green-hi: #2E9480;
+    --ink: #10302A; --muted: #5B6B68; --line: rgba(0, 90, 75, .12);
     --warn: #B45309; --warn-tint: rgba(254, 243, 199, .85); --bad: #B91C1C; --bad-tint: rgba(254, 226, 226, .85); --info: #1D4ED8; --info-tint: rgba(219, 234, 254, .85);
     --radius: 24px;
     /* Liquid Glass recipe */
     --glass-fill: rgba(255, 255, 255, .52);
     --glass-edge: rgba(255, 255, 255, .75);
     --glass-blur: blur(22px) saturate(185%);
-    --glass-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.35), 0 10px 30px rgba(0, 90, 80, .12), 0 1px 2px rgba(0, 90, 80, .08);
+    --glass-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.35), 0 10px 30px rgba(0, 90, 75, .12), 0 1px 2px rgba(0, 90, 75, .08);
     --fill-soft: rgba(255, 255, 255, .62);
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; color: var(--ink); font-family: 'Noto Sans Thai', -apple-system, system-ui, sans-serif; font-size: 15px; line-height: 1.5; }
-  html { background: #E9F3F1; }
+  html, body { margin: 0; color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; }
+  html { background: #EEF5F2; }
   body { min-height: 100vh; padding-bottom: calc(104px + env(safe-area-inset-bottom)); }
 
   /* ===== พื้นหลังให้กระจกมีอะไรหักเห (Brand ambient) ===== */
-  .ambient { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #EAF4F2; }
+  .ambient { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #EEF5F2; }
   .ambient i { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .75; }
-  .ambient i:nth-child(1) { width: 340px; height: 340px; left: -110px; top: -120px; background: #00786A; opacity: .55; }
-  .ambient i:nth-child(2) { width: 300px; height: 300px; right: -120px; top: 140px; background: #5CC8B8; }
-  .ambient i:nth-child(3) { width: 360px; height: 360px; left: 10%; bottom: -160px; background: #9ADBD0; }
+  .ambient i:nth-child(1) { width: 340px; height: 340px; left: -110px; top: -120px; background: #007864; opacity: .55; }
+  .ambient i:nth-child(2) { width: 300px; height: 300px; right: -120px; top: 140px; background: #8CC9B6; }
+  .ambient i:nth-child(3) { width: 360px; height: 360px; left: 10%; bottom: -160px; background: #C5E3D8; }
   .ambient i:nth-child(4) { width: 180px; height: 180px; right: 12%; bottom: 22%; background: #FFFFFF; opacity: .9; }
 
   /* ===== วัสดุกระจก ===== */
@@ -50,8 +53,10 @@
   /* ===== Header — Large title แบบ iOS ===== */
   header { padding: calc(22px + env(safe-area-inset-top)) 20px 18px; }
   header .brand { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 6px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--green-dark); }
-  header .brand .dot { width: 20px; height: 20px; border-radius: 50%; background: var(--green); display: grid; place-items: center; color: #fff; font-size: 11px; letter-spacing: 0; }
-  header h1 { margin: 12px 0 0; font-size: 30px; line-height: 1.2; font-weight: 700; letter-spacing: -.01em; color: var(--green-dark); }
+  header .brand { padding: 7px 14px; gap: 10px; letter-spacing: .14em; }
+  header .brand-logo { height: 15px; width: auto; display: block; }
+  header .brand-sep { width: 1px; height: 14px; background: var(--green); opacity: .45; }
+  header h1 { margin: 14px 0 0; font-size: 30px; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; color: var(--green-dark); }
   header p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
   main { padding: 0 16px; }
 
@@ -63,9 +68,9 @@
   /* ===== Form ===== */
   label { display: block; font-weight: 600; font-size: 14px; margin: 16px 0 6px; }
   label .req { color: var(--bad); }
-  input, select, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; font: inherit; background: var(--fill-soft); color: var(--ink); box-shadow: inset 0 1px 2px rgba(0,90,80,.06); transition: box-shadow .2s, border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
+  input, select, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; font: inherit; background: var(--fill-soft); color: var(--ink); box-shadow: inset 0 1px 2px rgba(0,90,75,.06); transition: box-shadow .2s, border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
   select { background-image: linear-gradient(45deg, transparent 50%, var(--green) 50%), linear-gradient(135deg, var(--green) 50%, transparent 50%); background-position: calc(100% - 20px) 52%, calc(100% - 15px) 52%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 36px; }
-  input:focus, select:focus, textarea:focus { outline: none; background-color: rgba(255,255,255,.9); border-color: rgba(0,120,106,.55); box-shadow: 0 0 0 4px rgba(0,120,106,.16); }
+  input:focus, select:focus, textarea:focus { outline: none; background-color: rgba(255,255,255,.9); border-color: rgba(0,120,100,.55); box-shadow: 0 0 0 4px rgba(0,120,100,.16); }
   textarea { min-height: 76px; resize: vertical; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -79,7 +84,7 @@
 
   /* ===== ปุ่ม — capsule, teal glass tint ===== */
   .btn { display: block; width: 100%; border: 0; border-radius: 999px; padding: 14px; font: inherit; font-weight: 700; color: #fff; cursor: pointer; text-align: center; text-decoration: none;
-    background: var(--green); box-shadow: 0 6px 16px rgba(0,120,106,.25);
+    background: var(--green); box-shadow: 0 6px 16px rgba(0,120,100,.25);
     transition: transform .15s, background .2s; }
   .btn:active { transform: scale(.97); background: var(--green-dark); }
   .btn[disabled] { background: rgba(120, 140, 137, .28); color: rgba(15,42,38,.45); box-shadow: inset 0 1px 0 rgba(255,255,255,.6); cursor: not-allowed; transform: none; }
@@ -106,7 +111,7 @@
   /* ===== ตัวเลข / Progress ===== */
   .stat { display: flex; justify-content: space-between; align-items: baseline; }
   .big { font-size: 32px; font-weight: 700; color: var(--green-dark); letter-spacing: -.01em; }
-  .bar { height: 12px; border-radius: 999px; background: rgba(0,90,80,.08); box-shadow: inset 0 1px 2px rgba(0,90,80,.12); overflow: hidden; margin: 12px 0 8px; }
+  .bar { height: 12px; border-radius: 999px; background: rgba(0,90,75,.08); box-shadow: inset 0 1px 2px rgba(0,90,75,.12); overflow: hidden; margin: 12px 0 8px; }
   .bar > div { height: 100%; border-radius: 999px; background: var(--green); transition: width .5s cubic-bezier(.2,.8,.2,1); }
   .steps { display: grid; gap: 8px; margin-top: 12px; }
   .step { display: flex; justify-content: space-between; padding: 11px 14px; border-radius: 16px; font-size: 14px; background: rgba(255,255,255,.45); border: 1px solid var(--line); }
@@ -121,8 +126,8 @@
   .inline input { flex: 1; }
   .code { font-size: 32px; font-weight: 700; letter-spacing: 6px; text-align: center; padding: 16px; border-radius: 18px; color: var(--green-dark); background: var(--green-tint); }
 
-  /* ===== บัตรสมาชิก Affiliate Club (สี CI ทึบ) ===== */
-  .mcard { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 24px; padding: 20px 22px; aspect-ratio: 1.586; display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(0,90,80,.28); }
+  /* ===== บัตรสมาชิก Dentiste Affiliate+ (สี CI ทึบ) ===== */
+  .mcard { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 24px; padding: 20px 22px; aspect-ratio: 1.586; display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(0,90,75,.28); }
   .mcard::before { content: ''; position: absolute; width: 280px; height: 280px; border-radius: 50%; background: var(--green-dark); right: -110px; top: -130px; }
   .mcard::after { content: ''; position: absolute; width: 190px; height: 190px; border-radius: 50%; background: var(--green-dark); left: -90px; bottom: -120px; }
   .mcard > * { position: relative; z-index: 1; }
@@ -146,7 +151,7 @@
   .seg { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 999px; margin-bottom: 14px; }
   .seg button { border: 0; background: transparent; font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); padding: 9px; border-radius: 999px; cursor: pointer; transition: background .2s, color .2s; }
   .seg button.on { background: var(--green); color: #fff; }
-  .myrank { display: flex; align-items: center; gap: 14px; background: var(--green); color: #fff; border-radius: 22px; padding: 14px 18px; margin-bottom: 14px; box-shadow: 0 10px 24px rgba(0,90,80,.22); }
+  .myrank { display: flex; align-items: center; gap: 14px; background: var(--green); color: #fff; border-radius: 22px; padding: 14px 18px; margin-bottom: 14px; box-shadow: 0 10px 24px rgba(0,90,75,.22); }
   .myrank .no { font-size: 30px; font-weight: 700; line-height: 1; }
   .myrank .t { flex: 1; font-size: 13px; opacity: .92; }
   .myrank .v { font-size: 17px; font-weight: 700; text-align: right; }
@@ -154,7 +159,8 @@
   .pd { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
   .pd .av { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; font-weight: 700; background: #fff; color: var(--green-dark); border: 3px solid var(--green); position: relative; }
   .pd.p1 .av { width: 66px; height: 66px; font-size: 24px; }
-  .pd .crown { position: absolute; top: -16px; font-size: 18px; }
+  .pd .crown { position: absolute; top: -20px; width: 26px; height: 26px; fill: var(--green); stroke: #fff; stroke-width: 1.4; stroke-linejoin: round; }
+  .prod .img .ph { width: 44%; height: 44%; fill: none; stroke: var(--green); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; opacity: .8; }
   .pd .nm { font-size: 13px; font-weight: 700; margin-top: 6px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pd .vl { font-size: 12px; color: var(--muted); }
   .pd .base { width: 100%; margin-top: 8px; border-radius: 16px 16px 10px 10px; display: grid; place-items: center; font-size: 26px; font-weight: 700; color: #fff; background: var(--green); }
@@ -170,10 +176,12 @@
   .lb .row.me .rk { background: var(--green); color: #fff; }
 
   /* ===== Boost Program ===== */
-  .boost-hero { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 26px; padding: 22px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(0,90,80,.28); }
+  .boost-hero { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 26px; padding: 22px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(0,90,75,.28); }
   .boost-hero::after { content: ''; position: absolute; width: 230px; height: 230px; border-radius: 50%; background: var(--green-dark); right: -60px; top: -40px; }
   .boost-hero > * { position: relative; z-index: 1; }
-  .boost-hero .kick { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+  .boost-hero .kick { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .boost-hero .kick img { height: 18px; width: auto; display: block; }
+  .boost-hero .kick span { padding-left: 10px; border-left: 1px solid rgba(255,255,255,.6); }
   .boost-hero .big11 { font-size: 64px; line-height: 1; font-weight: 700; letter-spacing: -.02em; margin: 6px 0 2px; }
   .boost-hero .ttl { font-size: 22px; font-weight: 700; }
   .boost-hero .chips2 { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
@@ -202,7 +210,7 @@
   .mockbar[hidden] { display: none; }
 
   .center { text-align: center; padding: 40px 18px; }
-  .spinner { width: 34px; height: 34px; border: 3px solid rgba(0,120,106,.15); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
+  .spinner { width: 34px; height: 34px; border: 3px solid rgba(0,120,100,.15); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .empty { text-align: center; color: var(--muted); padding: 24px 0; }
   a { color: var(--green); }
@@ -213,11 +221,11 @@
   }
   @media (prefers-reduced-transparency: reduce) {
     .card, .prod, nav, .mockbar { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
-    .toast { background: #0F2A26; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .toast { background: #10302A; -webkit-backdrop-filter: none; backdrop-filter: none; }
     .ambient i { display: none; }
   }
   @media (prefers-contrast: more) {
-    :root { --glass-fill: rgba(255,255,255,.9); --line: rgba(0,90,80,.35); --muted: #3B4A47; }
+    :root { --glass-fill: rgba(255,255,255,.9); --line: rgba(0,90,75,.35); --muted: #3B4A47; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -226,8 +234,8 @@
 <div class="ambient" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div id="mockbar" class="mockbar" hidden>โหมดตัวอย่าง (Prototype) — ข้อมูลจำลอง ไม่ได้เชื่อมระบบจริง</div>
 <header>
-  <span class="brand glass"><span class="dot">D</span>Dentiste' · Affiliate Club</span>
-  <h1 id="h-title">Affiliate Club</h1><p id="h-sub">กำลังโหลด…</p>
+  <span class="brand glass"><img class="brand-logo" src="logo-green.png" alt="Dentiste'" onerror="this.remove()"><span class="brand-sep"></span>Affiliate+</span>
+  <h1 id="h-title">Dentiste Affiliate+</h1><p id="h-sub">กำลังโหลด…</p>
 </header>
 <main id="app"><div class="card center"><div class="spinner"></div><div class="muted">กำลังโหลด…</div></div></main>
 <nav id="nav" hidden>
@@ -289,7 +297,7 @@ async function boot() {
       state.page = p.get('page') || state.page; state.ref = p.get('ref') || state.ref; state.campaign = p.get('c') || state.campaign;
     }
     state.me = await api('me', { ref: state.ref, campaign: state.campaign });
-    $('#h-title').textContent = state.me.brand || 'Affiliate Club';
+    $('#h-title').textContent = state.me.brand || 'Dentiste Affiliate+';
     const approved = state.me.affiliate && state.me.affiliate.status === 'approved';
     if (!approved && state.page !== 'register' && state.page !== 'boost') state.page = 'register';
     if (approved && state.page === 'register') state.page = 'me';
@@ -385,7 +393,7 @@ async function pageCatalog() {
       </div>
       ${d.products.length ? `<div class="grid">${d.products.map(p => `
         <div class="prod">
-          <div class="img">${p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy">` : '📦'}</div>
+          <div class="img">${p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy">` : '<svg class="ph" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>'}</div>
           <div class="b">
             <span class="name">${esc(p.name)}</span>
             <span class="muted">${esc(p.category || '')}${p.commission_note ? ' · ' + esc(p.commission_note) : ''}</span>
@@ -426,7 +434,7 @@ async function pageRequests() {
 
 /* ---------- แต้ม ยอดขาย Bonus ---------- */
 async function pageMe() {
-  header('บัตรสมาชิก & แต้ม', 'Affiliate Club ของคุณ');
+  header('บัตรสมาชิก & แต้ม', 'Dentiste Affiliate+ ของคุณ');
   loading();
   try {
     const d = await api('dashboard');
@@ -440,7 +448,7 @@ async function pageMe() {
         <h2>Bonus ยอดขายเดือนนี้ (${esc(d.period)})</h2>
         <div class="stat"><span class="muted">ยอดขาย</span><span class="big">฿${fmt(d.sales_this_month)}</span></div>
         <div class="bar"><div style="width:${pct}%"></div></div>
-        <div class="muted">${b.next ? `ขายเพิ่มอีก <b>฿${fmt(b.remaining)}</b> ถึงขั้น ${b.next.step} รับ Bonus ${fmt(b.next.bonus)} ${esc(b.unit)}` : (b.current ? 'ถึงขั้นสูงสุดแล้ว 🎉' : '')}</div>
+        <div class="muted">${b.next ? `ขายเพิ่มอีก <b>฿${fmt(b.remaining)}</b> ถึงขั้น ${b.next.step} รับ Bonus ${fmt(b.next.bonus)} ${esc(b.unit)}` : (b.current ? 'ถึงขั้นสูงสุดแล้ว' : '')}</div>
         <div class="steps">${steps.map(s => `<div class="step ${b.current && s.step <= b.current.step ? 'hit' : ''}"><span>ขั้น ${s.step} · ขาย ฿${fmt(s.min_sales)}+</span><b>+${fmt(s.bonus)} ${esc(b.unit)}</b></div>`).join('')}</div>
         <p class="muted" style="margin-bottom:0">ยอดเดือนที่แล้ว ฿${fmt(d.sales_last_month)} · ยอดขายอัปเดตเมื่อทีมนำเข้ารายงานจากแพลตฟอร์ม</p>
       </div>
@@ -451,11 +459,11 @@ async function pageMe() {
   } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
 }
 
-/* ---------- บัตรสมาชิก Affiliate Club ---------- */
+/* ---------- บัตรสมาชิก Dentiste Affiliate+ ---------- */
 function memberCard(a, rank) {
   const r = rank && rank.rank ? `<div class="mc-rank"><span>อันดับเดือนนี้</span><b>#${rank.rank}</b></div>` : '';
   return `<div class="mcard">
-    <div class="mc-top"><img class="mc-logo" src="logo-white.png" alt="Dentiste'" onerror="this.remove()"><span class="mc-logo-txt">Dentiste'</span><span class="mc-sep"></span><span class="mc-tag">Affiliate Club</span></div>
+    <div class="mc-top"><img class="mc-logo" src="logo-white.png" alt="Dentiste'" onerror="this.remove()"><span class="mc-logo-txt">Dentiste'</span><span class="mc-sep"></span><span class="mc-tag">Affiliate+</span></div>
     <div class="mc-mid"><b>${fmt(a.points)}</b><span>แต้มสะสม</span></div>
     <div class="mc-bot">
       <div><div class="mc-name">${esc(a.full_name)}</div><div class="mc-sub">${esc(a.affiliate_id)} · รหัสชวน ${esc(a.my_ref_code || '-')}<br>สมาชิกตั้งแต่ ${esc(a.registered_at)}</div></div>
@@ -474,7 +482,7 @@ async function pageLeaderboard(by) {
     const val = v => by === 'sales' ? '฿' + fmt(v) : fmt(v) + ' แต้ม';
     const ini = n => esc(String(n || '?').trim().charAt(0));
     const t = d.top, has = t.length && t.some(x => x.value > 0);
-    const pd = (x, cls) => x ? `<div class="pd ${cls} ${x.me ? 'me' : ''}"><div class="av">${cls === 'p1' ? '<span class="crown">👑</span>' : ''}${ini(x.name)}</div><div class="nm">${esc(x.me ? 'คุณ' : x.name)}</div><div class="vl">${val(x.value)}</div><div class="base">${x.rank}</div></div>` : '<div></div>';
+    const pd = (x, cls) => x ? `<div class="pd ${cls} ${x.me ? 'me' : ''}"><div class="av">${cls === 'p1' ? '<svg class="crown" viewBox="0 0 24 24"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 10H5z"/></svg>' : ''}${ini(x.name)}</div><div class="nm">${esc(x.me ? 'คุณ' : x.name)}</div><div class="vl">${val(x.value)}</div><div class="base">${x.rank}</div></div>` : '<div></div>';
     app.innerHTML = `
       <div class="seg glass"><button data-by="sales" class="${by === 'sales' ? 'on' : ''}">ยอดขายเดือนนี้</button><button data-by="points" class="${by === 'points' ? 'on' : ''}">แต้มสะสม</button></div>
       ${d.me ? `<div class="myrank"><div class="no">#${d.me.rank}</div><div class="t">อันดับของคุณ<br>จาก ${fmt(d.total)} คน</div><div class="v">${val(d.me.value)}</div></div>` : ''}
@@ -503,10 +511,10 @@ async function pageBoost() {
     else if (p.state === 'ended') cta = '<button class="btn" disabled>ปิดรับแล้ว</button>';
     else if (d.member_status === 'approved') cta = '<button class="btn" id="join">เข้าร่วม Program รับค่าคอมเพิ่ม</button>';
     else if (d.member_status === 'pending') cta = '<button class="btn" disabled>รออนุมัติสมาชิก — เข้าร่วมได้หลังอนุมัติ</button>';
-    else cta = '<button class="btn" id="toreg">สมัครสมาชิก Affiliate ก่อน (ฟรี)</button><p class="muted" style="text-align:center">เฉพาะสมาชิก Affiliate Club ที่ได้รับอนุมัติ</p>';
+    else cta = '<button class="btn" id="toreg">สมัครสมาชิก Affiliate ก่อน (ฟรี)</button><p class="muted" style="text-align:center">เฉพาะสมาชิก Dentiste Affiliate+ ที่ได้รับอนุมัติ</p>';
     app.innerHTML = `
       <div class="boost-hero">
-        <div class="kick">Dentiste' · Affiliate Club</div>
+        <div class="kick"><img src="logo-white.png" alt="Dentiste'" onerror="this.remove()"><span>Affiliate+</span></div>
         <div class="big11">${esc(m ? m[0] : '')}</div>
         <div class="ttl">${esc(p.title)}</div>
         ${p.extra_commission ? `<div class="comm"><span>ค่าคอมเพิ่ม</span><b>${esc(p.extra_commission)}</b></div>` : ''}
@@ -529,7 +537,7 @@ async function pageRewards() {
     app.innerHTML = `
       <div class="card stat"><span class="muted">แต้มที่ใช้ได้</span><span class="big">${fmt(d.points)}</span></div>
       ${d.rewards.length ? `<div class="grid">${d.rewards.map(r => `
-        <div class="prod"><div class="img">${r.image_url ? `<img src="${esc(r.image_url)}" alt="" loading="lazy">` : '🎁'}</div>
+        <div class="prod"><div class="img">${r.image_url ? `<img src="${esc(r.image_url)}" alt="" loading="lazy">` : '<svg class="ph" viewBox="0 0 24 24"><path d="M4 11h16v10H4zM3 7h18v4H3zM12 7v14"/><path d="M12 7c-1.5-3-5-3.5-5-1.2C7 7 9 7 12 7c3 0 5 0 5-1.2C17 3.5 13.5 4 12 7z"/></svg>'}</div>
           <div class="b"><span class="name">${esc(r.name)}</span><span class="muted">${fmt(r.points_cost)} แต้ม · เหลือ ${r.stock}</span>
           <button class="btn" data-rw="${esc(r.reward_id)}" data-cost="${r.points_cost}" ${d.points >= r.points_cost ? '' : 'disabled'}>${d.points >= r.points_cost ? 'แลก' : 'แต้มไม่พอ'}</button></div></div>`).join('')}</div>` : '<div class="card empty">ยังไม่มีรางวัล</div>'}
       ${d.redemptions.length ? `<div class="card list" style="margin-top:12px"><h2>รายการที่แลกแล้ว</h2>${d.redemptions.map(x => `<div class="item"><div class="top"><span>${esc(x.reward_name)}</span><span class="badge ${x.status === 'shipped' ? 'good' : x.status === 'rejected' ? 'bad' : 'warn'}">${esc(x.status_th)}</span></div><div class="muted">${esc(x.date)} · ${fmt(x.points_cost)} แต้ม</div></div>`).join('')}</div>` : ''}`;
@@ -583,7 +591,7 @@ function mockApi(action, d) {
   const addPts = (type, p) => { db.points += p; db.acts.unshift({ type, points: p, verified: true, date: 'วันนี้' }); };
   const pub = () => db.aff && Object.assign({}, db.aff, { points: db.points });
   switch (action) {
-    case 'me': return wait({ name: 'ผู้ทดสอบ', lead_ref: d.ref || '', affiliate: pub(), brand: 'Affiliate Club' });
+    case 'me': return wait({ name: 'ผู้ทดสอบ', lead_ref: d.ref || '', affiliate: pub(), brand: 'Dentiste Affiliate+' });
     case 'register': {
       const f = d.form;
       for (const k of ['full_name', 'phone', 'platform', 'channel_url', 'address', 'province', 'postcode']) if (!String(f[k] || '').trim()) return fail('กรุณากรอกข้อมูลที่มี * ให้ครบ');
