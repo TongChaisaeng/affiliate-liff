@@ -6,12 +6,13 @@
 <title>Dentiste Affiliate+</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  /* ===== Dentiste Affiliate+ — Clean Minimal + Flat Glass (เฉพาะแถบบน/เมนูล่าง) — สีทึบ ไม่ไล่สี ===== */
+  /* ===== Dentiste Affiliate+ — Clean Minimal + Flat Glass; แคมเปญ = Gen Z sticker style — สีทึบ ไม่ไล่สี ===== */
   :root {
     color-scheme: light;
-    --font: 'IBM Plex Sans Thai', -apple-system, system-ui, sans-serif;
+    --font: 'Noto Sans Thai', -apple-system, system-ui, sans-serif;
+    --lime: #D9FF4A; --ink2: #0D2823; --coral: #FF6A3D; --sun: #FFC93C;
     --green: #007864; --green-dark: #005A4B; --green-tint: #E8F2EF;
     --bg: #F3F5F4; --card: #FFFFFF; --line: #E2E8E5; --line-strong: #D3DCD8;
     --ink: #12211E; --muted: #66736F;
@@ -97,15 +98,16 @@
   .tile { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 12px; min-width: 0; }
   .tile .k { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tile .v { font-size: 18px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .banner { position: relative; overflow: hidden; display: block; background: var(--green); color: #fff; border-radius: var(--radius); padding: 18px 44px 18px 18px; margin-bottom: 12px; cursor: pointer; }
+  .banner { position: relative; overflow: hidden; display: block; background: var(--green); color: #fff; border: 2.5px solid var(--ink2); box-shadow: 4px 4px 0 var(--ink2); border-radius: 22px; padding: 16px 92px 16px 16px; margin: 0 4px 16px 0; cursor: pointer; }
   .banner::after { content: ''; position: absolute; right: -50px; top: -60px; width: 170px; height: 170px; border-radius: 50%; background: var(--green-dark); }
   .banner > * { position: relative; z-index: 1; }
-  .bn-k { font-size: 12px; font-weight: 600; letter-spacing: .06em; opacity: .85; }
-  .bn-t { font-size: 20px; font-weight: 700; margin-top: 2px; }
+  .bn-k { display: inline-block; font-size: 12px; font-weight: 800; background: var(--lime); color: var(--ink2); border: 2px solid var(--ink2); border-radius: 999px; padding: 0 10px; transform: rotate(-3deg); }
+  .bn-t { font-size: 24px; font-weight: 900; margin-top: 6px; line-height: 1.15; -webkit-text-stroke: 1.5px var(--ink2); paint-order: stroke fill; text-shadow: 3px 3px 0 var(--ink2); }
   .bn-s { font-size: 13.5px; opacity: .92; margin-top: 2px; }
-  .bn-go { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 26px; line-height: 1; }
-  .banner .bar { background: rgba(255, 255, 255, .25); }
-  .banner .bar > div { background: #fff; }
+  .bn-go { display: none; }
+  .bn-rocket { position: absolute; right: 14px; top: 50%; margin-top: -42px; width: 64px; height: auto; transform: rotate(38deg); animation: hover 2.6s ease-in-out infinite; }
+  .banner .bar { background: #fff; border: 2px solid var(--ink2); height: 10px; }
+  .banner .bar > div { background: var(--lime); border-radius: 0; }
 
   /* ===== Menu / list rows ===== */
   .menu { padding: 4px 16px; }
@@ -201,20 +203,29 @@
   .lb .row.me .rk { background: var(--green); color: #fff; }
 
   /* ===== แคมเปญ ===== */
-  .boost-hero { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 20px; padding: 20px; margin-bottom: 12px; }
-  .boost-hero::after { content: ''; position: absolute; width: 220px; height: 220px; border-radius: 50%; background: var(--green-dark); right: -60px; top: -50px; }
+  /* Gen Z sticker style: ขอบหมึก + เงาทึบ + สติกเกอร์ (ไม่ไล่สี) */
+  .boost-hero { position: relative; overflow: hidden; background: var(--green); color: #fff; border: 2.5px solid var(--ink2); border-radius: 24px; box-shadow: 5px 5px 0 var(--ink2); padding: 18px 18px 0; margin: 4px 5px 18px 0; }
+  .boost-hero::after { content: ''; position: absolute; width: 230px; height: 230px; border-radius: 50%; background: var(--green-dark); right: -70px; bottom: -40px; }
   .boost-hero > * { position: relative; z-index: 1; }
-  .boost-hero .kick { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
-  .boost-hero .kick img { height: 16px; width: auto; display: block; }
-  .boost-hero .kick span { padding-left: 10px; border-left: 1px solid rgba(255, 255, 255, .6); }
-  .boost-hero .big11 { font-size: 56px; line-height: 1; font-weight: 700; letter-spacing: -.02em; margin: 10px 0 2px; }
-  .boost-hero .ttl { font-size: 19px; font-weight: 600; }
-  .boost-hero .chips2 { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-  .boost-hero .pill { background: #fff; color: var(--green-dark); border-radius: 999px; padding: 4px 12px; font-size: 12.5px; font-weight: 600; }
-  .boost-hero .pill.o { background: var(--green-dark); color: #fff; }
-  .boost-hero .comm { position: absolute; right: 20px; top: 20px; text-align: right; }
-  .boost-hero .comm b { display: block; font-size: 34px; line-height: 1; }
-  .boost-hero .comm span { font-size: 12px; opacity: .9; }
+  .bh-top { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .bh-top img { height: 16px; width: auto; display: block; }
+  .bh-top span { padding-left: 10px; border-left: 1.5px solid rgba(255, 255, 255, .7); }
+  .bh-tag { display: inline-block; margin-top: 14px; background: var(--lime); color: var(--ink2); font-weight: 900; font-size: 15px; letter-spacing: .04em; padding: 3px 14px; border: 2px solid var(--ink2); border-radius: 999px; box-shadow: 3px 3px 0 var(--ink2); transform: rotate(-4deg); }
+  .big11 { font-size: 84px; line-height: .95; font-weight: 900; letter-spacing: -.03em; margin: 8px 0 4px; color: #fff; -webkit-text-stroke: 2.5px var(--ink2); paint-order: stroke fill; text-shadow: 5px 5px 0 var(--ink2); }
+  .boost-hero .ttl { font-size: 18px; font-weight: 800; }
+  .boost-hero .chips2 { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; padding-right: 108px; }
+  .boost-hero .pill { background: #fff; color: var(--ink2); border: 2px solid var(--ink2); border-radius: 999px; padding: 2px 11px; font-size: 12.5px; font-weight: 700; }
+  .boost-hero .pill.o { background: var(--ink2); color: var(--lime); }
+  .bh-comm { position: absolute; right: 12px; top: 14px; z-index: 2; width: 112px; height: 112px; filter: drop-shadow(3px 3px 0 var(--ink2)); transform: rotate(8deg); }
+  .bh-comm > div { width: 100%; height: 100%; background: var(--lime); clip-path: polygon(100.0% 50.0%, 90.9% 59.3%, 95.0% 71.7%, 82.8% 76.2%, 81.2% 89.1%, 68.2% 87.8%, 61.1% 98.7%, 50.0% 92.0%, 38.9% 98.7%, 31.8% 87.8%, 18.8% 89.1%, 17.2% 76.2%, 5.0% 71.7%, 9.1% 59.3%, 0.0% 50.0%, 9.1% 40.7%, 5.0% 28.3%, 17.2% 23.8%, 18.8% 10.9%, 31.8% 12.2%, 38.9% 1.3%, 50.0% 8.0%, 61.1% 1.3%, 68.2% 12.2%, 81.2% 10.9%, 82.8% 23.8%, 95.0% 28.3%, 90.9% 40.7%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ink2); text-align: center; }
+  .bh-comm span { font-size: 11px; font-weight: 700; line-height: 1.1; }
+  .bh-comm b { font-size: 30px; font-weight: 900; line-height: 1; }
+  .bh-rocket { position: absolute; right: 18px; top: 50%; margin-top: -30px; z-index: 1; width: 84px; height: auto; transform: rotate(38deg); animation: hover 2.6s ease-in-out infinite; }
+  .bh-spark { position: absolute; z-index: 1; width: 22px; height: 22px; }
+  @keyframes hover { 50% { transform: rotate(38deg) translate(4px, -8px); } }
+  .ticker { position: relative; z-index: 2; margin: 0 -18px; background: var(--ink2); color: var(--lime); overflow: hidden; white-space: nowrap; font-weight: 800; font-size: 13px; padding: 7px 0; }
+  .ticker > div { display: inline-block; animation: marquee 16s linear infinite; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
   .details { white-space: pre-line; font-size: 14px; line-height: 1.7; }
   .joined { display: flex; align-items: center; gap: 12px; background: var(--green-tint); color: var(--green-dark); border-radius: 14px; padding: 14px 16px; font-weight: 600; }
   .joined .ok { width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; font-size: 16px; }
@@ -243,7 +254,7 @@
   .spinner { width: 30px; height: 30px; border: 3px solid var(--green-tint); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .empty { text-align: center; color: var(--muted); padding: 24px 0; }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } .bh-rocket, .ticker > div, .bn-rocket { animation: none !important; } }
 </style>
 </head>
 <body>
@@ -311,6 +322,7 @@ const ICON = {
   flame: '<svg viewBox="0 0 24 24"><path d="M12 3c3 3.5 4.5 6.5 4.5 9.5a4.5 4.5 0 0 1-9 0c0-1.6.6-3 1.6-4.2.2 1.3.9 2.2 1.9 2.7C10.6 8.5 11 5.5 12 3z"/></svg>',
   up: '<svg viewBox="0 0 24 24"><path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/></svg>',
 };
+const ROCKET = cls => `<svg class="${cls}" viewBox="0 0 120 165" aria-hidden="true"><g stroke="#0D2823" stroke-width="3.5" stroke-linejoin="round"><path d="M44 112C40 132 52 147 60 160C68 147 80 132 76 112Z" fill="#FF6A3D"/><path d="M51 112C49 127 55 138 60 147C65 138 71 127 69 112Z" fill="#FFC93C"/><path d="M43 74L22 106L24 120L45 106Z" fill="#FF6A3D"/><path d="M77 74L98 106L96 120L75 106Z" fill="#FF6A3D"/><path d="M60 6C89 27 87 90 79 112L41 112C33 90 31 27 60 6Z" fill="#fff"/><path d="M60 6C70 13 77 24 81 36L39 36C43 24 50 13 60 6Z" fill="#D9FF4A"/><circle cx="60" cy="62" r="13" fill="#007864" stroke-width="4.5"/><rect x="56" y="96" width="8" height="28" rx="4" fill="#FF6A3D"/></g><circle cx="55" cy="57" r="3.5" fill="#fff"/></svg>`;
 const rowHtml = (r, attr) => `<div class="row" ${attr}><span class="ic ${r.warn ? 'warn' : ''}">${r.icon}</span><span class="tx"><b>${esc(r.t)}</b>${r.s ? `<span>${esc(r.s)}</span>` : ''}</span><span class="chev">›</span></div>`;
 
 async function api(action, data) {
@@ -512,7 +524,7 @@ async function pageMe() {
         <div class="bn-t">${esc(p.title)}</div>
         <div class="bn-s">${pg.joined ? (p.gmv_target ? `ยอดช่วงแคมเปญ ฿${fmt(m.gmv || 0)} / ฿${fmt(p.gmv_target)}` : 'คุณเข้าร่วมแล้ว') : `รับค่าคอมเพิ่ม ${esc(p.extra_commission || '')} · แตะเพื่อเข้าร่วม`}</div>
         ${pg.joined && p.gmv_target ? `<div class="bar"><div style="width:${Math.min(100, (m.gmv || 0) / p.gmv_target * 100)}%"></div></div>` : ''}
-        <span class="bn-go">›</span></div>` : ''}
+        ${ROCKET('bn-rocket')}</div>` : ''}
       ${todos.length ? `<div class="sec-title">สิ่งที่ควรทำต่อ</div><div class="card menu">${todos.map((r, i) => rowHtml(r, `data-todo="${i}"`)).join('')}</div>` : ''}
       <div class="sec-title">Bonus เดือนนี้ (${esc(d.period)})</div>
       <div class="card">
@@ -613,6 +625,7 @@ async function pageBoost() {
     header(p.title, 'โปรแกรมพิเศษ รับค่าคอมเพิ่ม');
     const ST = { open: 'เปิดรับแล้ว', upcoming: 'ลงทะเบียนล่วงหน้า', ended: 'จบโปรแกรมแล้ว' };
     const m = String(p.title).match(/\d+\.\d+/);
+    const tick = ['BOOST UP ' + (m ? m[0] : ''), p.extra_commission ? 'ค่าคอมพุ่ง ' + p.extra_commission : '', p.start ? p.start + ' – ' + p.end : '', 'ติดตะกร้า TikTok Shop', p.hashtag || ''].filter(Boolean).map(t => '★ ' + esc(t)).join('&nbsp;&nbsp;&nbsp;') + '&nbsp;&nbsp;&nbsp;';
     let cta;
     if (d.joined) cta = `<div class="joined"><span class="ok">✓</span><div>คุณเข้าร่วมโปรแกรมแล้ว<div class="muted" style="font-weight:400">เมื่อ ${esc(d.joined_at)}</div></div></div>`;
     else if (p.state === 'ended') cta = '<button class="btn" disabled>ปิดรับแล้ว</button>';
@@ -621,11 +634,14 @@ async function pageBoost() {
     else cta = '<button class="btn" id="toreg">สมัครสมาชิก Affiliate ก่อน (ฟรี)</button><p class="muted" style="text-align:center">เฉพาะสมาชิก Dentiste Affiliate+ ที่ได้รับอนุมัติ</p>';
     app.innerHTML = `
       <div class="boost-hero">
-        <div class="kick"><img src="logo-white.png" alt="Dentiste'" onerror="this.remove()"><span>Affiliate+</span></div>
+        <div class="bh-top"><img src="logo-white.png" alt="Dentiste'" onerror="this.remove()"><span>Affiliate+</span></div>
+        <span class="bh-tag">BOOST UP</span>
         <div class="big11">${esc(m ? m[0] : '')}</div>
         <div class="ttl">${esc(p.title)}</div>
-        ${p.extra_commission ? `<div class="comm"><span>ค่าคอมเพิ่ม</span><b>${esc(p.extra_commission)}</b></div>` : ''}
+        ${p.extra_commission ? `<div class="bh-comm"><div><span>ค่าคอม<br>เพิ่ม</span><b>${esc(p.extra_commission)}</b></div></div>` : ''}
         <div class="chips2"><span class="pill">${esc(ST[p.state] || '')}</span>${p.start ? `<span class="pill o">${esc(p.start)} – ${esc(p.end)}</span>` : ''}</div>
+        ${ROCKET('bh-rocket')}<svg class="bh-spark" style="right:120px;top:150px" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z" fill="#D9FF4A" stroke="#0D2823" stroke-width="1.6" stroke-linejoin="round"/></svg><svg class="bh-spark" style="right:16px;top:140px;width:16px;height:16px" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z" fill="#fff" stroke="#0D2823" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <div class="ticker"><div>${(tick + tick)}</div></div>
       </div>
       <div style="margin-bottom:14px">${cta}</div>
       ${missionsHtml(p, d)}
