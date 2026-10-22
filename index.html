@@ -6,116 +6,144 @@
 <title>Dentiste Affiliate+</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ===== Dentiste' CI ===== */
-  /* ฟอนต์ตาม CI: อังกฤษ Manrope / ไทย DB Helvethaica (ใช้ได้เมื่อเครื่องมีฟอนต์หรือใส่ไฟล์ฟอนต์ที่มีลิขสิทธิ์) — สำรองด้วย Noto Sans Thai */
+  /* ===== Dentiste Affiliate+ — Clean Minimal + Flat Glass (เฉพาะแถบบน/เมนูล่าง) — สีทึบ ไม่ไล่สี ===== */
   :root {
     color-scheme: light;
-    --font: 'Manrope', 'DB Helvethaica X', 'DB HelvethaicaX', 'DB Helvethaica', 'Noto Sans Thai', -apple-system, system-ui, sans-serif;
-    --green: #007864; --green-dark: #005A4B; --green-tint: #E6F2EF; --green-hi: #2E9480;
-    --ink: #10302A; --muted: #5B6B68; --line: rgba(0, 90, 75, .12);
-    --warn: #B45309; --warn-tint: rgba(254, 243, 199, .85); --bad: #B91C1C; --bad-tint: rgba(254, 226, 226, .85); --info: #1D4ED8; --info-tint: rgba(219, 234, 254, .85);
-    --radius: 24px;
-    /* Liquid Glass recipe */
-    --glass-fill: rgba(255, 255, 255, .52);
-    --glass-edge: rgba(255, 255, 255, .75);
-    --glass-blur: blur(22px) saturate(185%);
-    --glass-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.35), 0 10px 30px rgba(0, 90, 75, .12), 0 1px 2px rgba(0, 90, 75, .08);
-    --fill-soft: rgba(255, 255, 255, .62);
+    --font: 'IBM Plex Sans Thai', -apple-system, system-ui, sans-serif;
+    --green: #007864; --green-dark: #005A4B; --green-tint: #E8F2EF;
+    --bg: #F3F5F4; --card: #FFFFFF; --line: #E2E8E5; --line-strong: #D3DCD8;
+    --ink: #12211E; --muted: #66736F;
+    --warn: #9A5B00; --warn-tint: #FFF3DC; --bad: #B42318; --bad-tint: #FDECEA; --info: #1F5FBF; --info-tint: #E8F0FC;
+    --radius: 18px;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; }
-  html { background: #EEF5F2; }
-  body { min-height: 100vh; padding-bottom: calc(104px + env(safe-area-inset-bottom)); }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  body { min-height: 100vh; padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
+  button { font-family: inherit; }
+  .num { font-variant-numeric: tabular-nums; }
 
-  /* ===== พื้นหลังให้กระจกมีอะไรหักเห (Brand ambient) ===== */
-  .ambient { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #EEF5F2; }
-  .ambient i { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .75; }
-  .ambient i:nth-child(1) { width: 340px; height: 340px; left: -110px; top: -120px; background: #007864; opacity: .55; }
-  .ambient i:nth-child(2) { width: 300px; height: 300px; right: -120px; top: 140px; background: #8CC9B6; }
-  .ambient i:nth-child(3) { width: 360px; height: 360px; left: 10%; bottom: -160px; background: #C5E3D8; }
-  .ambient i:nth-child(4) { width: 180px; height: 180px; right: 12%; bottom: 22%; background: #FFFFFF; opacity: .9; }
+  /* ===== Flat glass: ใช้กับแถบบนและเมนูล่างที่ลอยเหนือเนื้อหาเท่านั้น ===== */
+  .glass { background: rgba(255, 255, 255, .8); -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%); }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .glass { background: rgba(255, 255, 255, .97); } }
+  @media (prefers-reduced-transparency: reduce) { .glass { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; } }
 
-  /* ===== วัสดุกระจก ===== */
-  .glass, .card, .prod, nav, .mockbar, .toast {
-    position: relative; background: var(--glass-fill);
-    -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-edge); box-shadow: var(--glass-shadow);
-  }
-  /* แสงสะท้อน specular ขอบบน */
-  .card::before, .prod::before, nav::before {
-    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-    background: linear-gradient(160deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,0) 70%, rgba(255,255,255,.18) 100%);
-  }
-  .card > *, .prod > * { position: relative; }
+  /* ===== แถบบน ===== */
+  .topbar { position: sticky; top: 0; z-index: 6; display: flex; align-items: center; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) 18px 10px; border-bottom: 1px solid rgba(18, 33, 30, .06); }
+  .tb-logo { height: 16px; width: auto; display: block; }
+  .tb-logo + .tb-txt { display: none; }
+  .tb-txt { font-weight: 700; color: var(--green); }
+  .tb-sep { width: 1px; height: 14px; background: var(--line-strong); }
+  .tb-name { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark); }
+  .tb-sp { flex: 1; }
+  .tb-pts { font-size: 12.5px; font-weight: 600; color: var(--green-dark); background: var(--green-tint); padding: 4px 10px; border-radius: 999px; }
+  .tb-pts[hidden] { display: none; }
 
-  /* ===== Header — Large title แบบ iOS ===== */
-  header { padding: calc(22px + env(safe-area-inset-top)) 20px 18px; }
-  header .brand { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 6px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--green-dark); }
-  header .brand { padding: 7px 14px; gap: 10px; letter-spacing: .14em; }
-  header .brand-logo { height: 15px; width: auto; display: block; }
-  header .brand-sep { width: 1px; height: 14px; background: var(--green); opacity: .45; }
-  header h1 { margin: 14px 0 0; font-size: 30px; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; color: var(--green-dark); }
+  /* ===== หัวข้อหน้า ===== */
+  header.ph { padding: 18px 18px 4px; }
+  .back { display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; color: var(--green); font-weight: 600; font-size: 14px; padding: 0; margin: 0 0 6px; cursor: pointer; }
+  .back[hidden] { display: none; }
+  header h1 { margin: 0; font-size: 26px; line-height: 1.25; font-weight: 700; letter-spacing: -.01em; }
   header p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
-  main { padding: 0 16px; }
+  main { padding: 12px 16px 0; }
 
-  /* ===== Card ===== */
-  .card { border-radius: var(--radius); padding: 18px; margin-bottom: 14px; }
-  .card h2 { margin: 0 0 10px; font-size: 17px; font-weight: 700; color: var(--green-dark); }
+  /* ===== Card & typography ===== */
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin-bottom: 12px; }
+  .card h2 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
+  .sec-title { font-size: 13px; font-weight: 600; color: var(--muted); margin: 20px 4px 8px; }
   .muted { color: var(--muted); font-size: 13px; }
+  a { color: var(--green); }
 
   /* ===== Form ===== */
-  label { display: block; font-weight: 600; font-size: 14px; margin: 16px 0 6px; }
+  label { display: block; font-weight: 500; font-size: 14px; margin: 16px 0 6px; }
   label .req { color: var(--bad); }
-  input, select, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; font: inherit; background: var(--fill-soft); color: var(--ink); box-shadow: inset 0 1px 2px rgba(0,90,75,.06); transition: box-shadow .2s, border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
-  select { background-image: linear-gradient(45deg, transparent 50%, var(--green) 50%), linear-gradient(135deg, var(--green) 50%, transparent 50%); background-position: calc(100% - 20px) 52%, calc(100% - 15px) 52%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 36px; }
-  input:focus, select:focus, textarea:focus { outline: none; background-color: rgba(255,255,255,.9); border-color: rgba(0,120,100,.55); box-shadow: 0 0 0 4px rgba(0,120,100,.16); }
+  input, select, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--line-strong); border-radius: 12px; font: inherit; background: #fff; color: var(--ink); -webkit-appearance: none; appearance: none; transition: border-color .15s, box-shadow .15s; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23007864' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(0, 120, 100, .14); }
   textarea { min-height: 76px; resize: vertical; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip { border: 1px solid var(--line); background: var(--fill-soft); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; user-select: none; transition: transform .15s, background .2s; }
-  .chip:active { transform: scale(.96); }
-  .chip.on { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
+  .chip { border: 1px solid var(--line-strong); background: #fff; border-radius: 999px; padding: 7px 14px; font-size: 13.5px; cursor: pointer; user-select: none; transition: background .15s, color .15s; }
+  .chip.on { background: var(--green); border-color: var(--green); color: #fff; }
   .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; font-size: 13px; }
   .check input { width: 22px; height: 22px; margin-top: 1px; flex: none; padding: 0; border-radius: 7px; display: grid; place-items: center; }
   .check input:checked { background: var(--green); border-color: var(--green); }
   .check input:checked::after { content: ''; width: 6px; height: 11px; border: solid #fff; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
+  .at { display: flex; align-items: center; background: #fff; border: 1px solid var(--line-strong); border-radius: 12px; padding-left: 14px; transition: border-color .15s, box-shadow .15s; }
+  .at span { color: var(--muted); font-weight: 600; }
+  .at input { border: 0; padding-left: 4px; }
+  .at input:focus { box-shadow: none; }
+  .at:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px rgba(0, 120, 100, .14); }
 
-  /* ===== ปุ่ม — capsule, teal glass tint ===== */
-  .btn { display: block; width: 100%; border: 0; border-radius: 999px; padding: 14px; font: inherit; font-weight: 700; color: #fff; cursor: pointer; text-align: center; text-decoration: none;
-    background: var(--green); box-shadow: 0 6px 16px rgba(0,120,100,.25);
-    transition: transform .15s, background .2s; }
-  .btn:active { transform: scale(.97); background: var(--green-dark); }
-  .btn[disabled] { background: rgba(120, 140, 137, .28); color: rgba(15,42,38,.45); box-shadow: inset 0 1px 0 rgba(255,255,255,.6); cursor: not-allowed; transform: none; }
-  .btn.ghost { background: #fff; color: var(--green); box-shadow: 0 0 0 1.5px var(--green); }
-  .btn.ghost[disabled] { color: var(--green-dark); background: var(--green-tint); box-shadow: none; }
-  .btn.sm { display: inline-block; width: auto; padding: 8px 16px; font-size: 13px; }
+  /* ===== ปุ่ม ===== */
+  .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 48px; border: 0; border-radius: 14px; padding: 12px 16px; font: inherit; font-weight: 600; background: var(--green); color: #fff; cursor: pointer; text-align: center; text-decoration: none; transition: background .15s, transform .1s; }
+  .btn:active { background: var(--green-dark); transform: scale(.985); }
+  .btn[disabled] { background: #E4E9E7; color: #98A39F; cursor: not-allowed; transform: none; }
+  .btn.ghost { background: #fff; color: var(--green-dark); border: 1px solid var(--line-strong); }
+  .btn.ghost:active { background: var(--green-tint); }
+  .btn.ghost[disabled] { background: #F4F6F5; color: #98A39F; }
+  .btn.sm { display: inline-flex; width: auto; min-height: 40px; padding: 8px 14px; font-size: 13.5px; border-radius: 12px; }
 
   /* ===== Badge ===== */
-  .badge { display: inline-block; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,.7); color: var(--muted); border: 1px solid rgba(255,255,255,.8); }
-  .badge.good { background: var(--green-tint); color: var(--green-dark); border-color: var(--green-tint); }
+  .badge { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600; background: #EEF1F0; color: var(--muted); }
+  .badge.good { background: var(--green-tint); color: var(--green-dark); }
   .badge.warn { background: var(--warn-tint); color: var(--warn); }
   .badge.bad { background: var(--bad-tint); color: var(--bad); }
   .badge.info { background: var(--info-tint); color: var(--info); }
 
+  /* ===== Home ===== */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+  .tile { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 12px; min-width: 0; }
+  .tile .k { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile .v { font-size: 18px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .banner { position: relative; overflow: hidden; display: block; background: var(--green); color: #fff; border-radius: var(--radius); padding: 18px 44px 18px 18px; margin-bottom: 12px; cursor: pointer; }
+  .banner::after { content: ''; position: absolute; right: -50px; top: -60px; width: 170px; height: 170px; border-radius: 50%; background: var(--green-dark); }
+  .banner > * { position: relative; z-index: 1; }
+  .bn-k { font-size: 12px; font-weight: 600; letter-spacing: .06em; opacity: .85; }
+  .bn-t { font-size: 20px; font-weight: 700; margin-top: 2px; }
+  .bn-s { font-size: 13.5px; opacity: .92; margin-top: 2px; }
+  .bn-go { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 26px; line-height: 1; }
+  .banner .bar { background: rgba(255, 255, 255, .25); }
+  .banner .bar > div { background: #fff; }
+
+  /* ===== Menu / list rows ===== */
+  .menu { padding: 4px 16px; }
+  .menu .row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; cursor: pointer; }
+  .menu .row:last-child { border-bottom: 0; }
+  .menu .ic { width: 38px; height: 38px; flex: none; border-radius: 11px; background: var(--green-tint); display: grid; place-items: center; }
+  .menu .ic svg { width: 20px; height: 20px; fill: none; stroke: var(--green); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .menu .ic.warn { background: var(--warn-tint); } .menu .ic.warn svg { stroke: var(--warn); }
+  .menu .tx { flex: 1; min-width: 0; }
+  .menu .tx b { display: block; font-weight: 600; font-size: 14.5px; }
+  .menu .tx span { display: block; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .menu .chev { color: #A9B4B0; font-size: 20px; line-height: 1; }
+  .profile { display: flex; align-items: center; gap: 14px; }
+  .avatar { width: 52px; height: 52px; flex: none; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; font-size: 20px; font-weight: 700; }
+
   /* ===== สินค้า / รางวัล ===== */
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .prod { border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
-  .prod .img { margin: 8px 8px 0; border-radius: 18px; overflow: hidden; aspect-ratio: 1; background: var(--green-tint); display: flex; align-items: center; justify-content: center; font-size: 34px; }
+  .prod { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+  .prod .img { aspect-ratio: 1; background: var(--green-tint); display: flex; align-items: center; justify-content: center; }
   .prod .img img { width: 100%; height: 100%; object-fit: cover; }
-  .prod .b { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
-  .prod .name { font-weight: 600; font-size: 14px; }
-  .prod .btn { margin-top: auto; padding: 10px; font-size: 13px; }
+  .prod .img .ph { width: 40%; height: 40%; fill: none; stroke: var(--green); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; opacity: .75; }
+  .prod .b { padding: 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .prod .name { font-weight: 600; font-size: 14px; line-height: 1.4; }
+  .prod .btn { margin-top: auto; min-height: 40px; padding: 8px; font-size: 13px; border-radius: 12px; }
+  .prod .btn.ghost { margin-top: 6px; }
+  .comm-badge { align-self: flex-start; font-size: 12px; font-weight: 600; color: var(--green-dark); background: var(--green-tint); border-radius: 999px; padding: 2px 10px; }
+  .brief { font-size: 12.5px; color: var(--muted); }
+  .brief summary { cursor: pointer; color: var(--green); font-weight: 600; }
+  .brief div { white-space: pre-line; margin-top: 4px; }
 
   /* ===== ตัวเลข / Progress ===== */
-  .stat { display: flex; justify-content: space-between; align-items: baseline; }
-  .big { font-size: 32px; font-weight: 700; color: var(--green-dark); letter-spacing: -.01em; }
-  .bar { height: 12px; border-radius: 999px; background: rgba(0,90,75,.08); box-shadow: inset 0 1px 2px rgba(0,90,75,.12); overflow: hidden; margin: 12px 0 8px; }
-  .bar > div { height: 100%; border-radius: 999px; background: var(--green); transition: width .5s cubic-bezier(.2,.8,.2,1); }
+  .stat { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .big { font-size: 28px; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .bar { height: 8px; border-radius: 999px; background: #E6EDEA; overflow: hidden; margin: 12px 0 8px; }
+  .bar > div { height: 100%; border-radius: 999px; background: var(--green); transition: width .5s cubic-bezier(.2, .8, .2, 1); }
   .steps { display: grid; gap: 8px; margin-top: 12px; }
-  .step { display: flex; justify-content: space-between; padding: 11px 14px; border-radius: 16px; font-size: 14px; background: rgba(255,255,255,.45); border: 1px solid var(--line); }
-  .step.hit { background: var(--green); border-color: var(--green); color: #fff; }
+  .step { display: flex; justify-content: space-between; padding: 10px 14px; border-radius: 12px; font-size: 14px; border: 1px solid var(--line); }
+  .step.hit { background: var(--green-tint); border-color: rgba(0, 120, 100, .35); color: var(--green-dark); font-weight: 600; }
 
   /* ===== List ===== */
   .list .item { padding: 13px 0; border-bottom: 1px solid var(--line); }
@@ -124,88 +152,72 @@
   .item .title { font-weight: 600; }
   .inline { display: flex; gap: 8px; margin-top: 10px; }
   .inline input { flex: 1; }
-  .code { font-size: 32px; font-weight: 700; letter-spacing: 6px; text-align: center; padding: 16px; border-radius: 18px; color: var(--green-dark); background: var(--green-tint); }
+  .code { font-size: 30px; font-weight: 700; letter-spacing: 6px; text-align: center; padding: 16px; border-radius: 14px; color: var(--green-dark); background: var(--green-tint); }
 
-  /* ===== บัตรสมาชิก Dentiste Affiliate+ (สี CI ทึบ) ===== */
-  .mcard { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 24px; padding: 20px 22px; aspect-ratio: 1.586; display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(0,90,75,.28); }
-  .mcard::before { content: ''; position: absolute; width: 280px; height: 280px; border-radius: 50%; background: var(--green-dark); right: -110px; top: -130px; }
-  .mcard::after { content: ''; position: absolute; width: 190px; height: 190px; border-radius: 50%; background: var(--green-dark); left: -90px; bottom: -120px; }
+  /* ===== บัตรสมาชิก (สีทึบ) ===== */
+  .mcard { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 20px; padding: 20px 22px; aspect-ratio: 1.7; display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 12px; }
+  .mcard::before { content: ''; position: absolute; width: 260px; height: 260px; border-radius: 50%; background: var(--green-dark); right: -100px; top: -120px; }
   .mcard > * { position: relative; z-index: 1; }
   .mc-top { display: flex; align-items: center; gap: 12px; }
-  .mc-logo { height: 26px; width: auto; display: block; }
+  .mc-logo { height: 24px; width: auto; display: block; }
   .mc-logo + .mc-logo-txt { display: none; }
-  .mc-logo-txt { font-size: 22px; font-weight: 700; letter-spacing: .01em; }
-  .mc-sep { width: 1.5px; height: 24px; background: #fff; opacity: .9; }
-  .mc-tag { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .mc-logo-txt { font-size: 20px; font-weight: 700; }
+  .mc-sep { width: 1px; height: 22px; background: rgba(255, 255, 255, .7); }
+  .mc-tag { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
   .mc-mid { display: flex; align-items: baseline; gap: 8px; }
-  .mc-mid b { font-size: 38px; line-height: 1; letter-spacing: -.01em; }
+  .mc-mid b { font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
   .mc-mid span { font-size: 13px; opacity: .9; }
   .mc-bot { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
-  .mc-name { font-size: 17px; font-weight: 700; line-height: 1.3; }
-  .mc-sub { font-size: 12px; opacity: .85; letter-spacing: .02em; }
-  .mc-rank { text-align: right; flex: none; background: #fff; color: var(--green-dark); border-radius: 16px; padding: 6px 12px; }
+  .mc-name { font-size: 16px; font-weight: 600; line-height: 1.3; }
+  .mc-sub { font-size: 12px; opacity: .85; }
+  .mc-rank { text-align: right; flex: none; background: #fff; color: var(--green-dark); border-radius: 12px; padding: 6px 12px; }
   .mc-rank span { display: block; font-size: 10px; font-weight: 600; }
-  .mc-rank b { font-size: 20px; line-height: 1.1; }
+  .mc-rank b { font-size: 18px; line-height: 1.1; }
 
   /* ===== Leaderboard ===== */
-  .seg { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 999px; margin-bottom: 14px; }
-  .seg button { border: 0; background: transparent; font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); padding: 9px; border-radius: 999px; cursor: pointer; transition: background .2s, color .2s; }
-  .seg button.on { background: var(--green); color: #fff; }
-  .myrank { display: flex; align-items: center; gap: 14px; background: var(--green); color: #fff; border-radius: 22px; padding: 14px 18px; margin-bottom: 14px; box-shadow: 0 10px 24px rgba(0,90,75,.22); }
-  .myrank .no { font-size: 30px; font-weight: 700; line-height: 1; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 12px; margin-bottom: 12px; background: #E6EBE9; }
+  .seg button { border: 0; background: transparent; font-size: 14px; font-weight: 600; color: var(--muted); padding: 9px; border-radius: 9px; cursor: pointer; transition: background .15s, color .15s; }
+  .seg button.on { background: #fff; color: var(--green-dark); box-shadow: 0 1px 2px rgba(18, 33, 30, .08); }
+  .myrank { display: flex; align-items: center; gap: 14px; background: var(--green); color: #fff; border-radius: 16px; padding: 14px 18px; margin-bottom: 12px; }
+  .myrank .no { font-size: 28px; font-weight: 700; line-height: 1; }
   .myrank .t { flex: 1; font-size: 13px; opacity: .92; }
   .myrank .v { font-size: 17px; font-weight: 700; text-align: right; }
-  .podium { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; align-items: end; margin-bottom: 14px; }
+  .podium { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; align-items: end; margin-bottom: 12px; }
   .pd { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
-  .pd .av { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; font-weight: 700; background: #fff; color: var(--green-dark); border: 3px solid var(--green); position: relative; }
-  .pd.p1 .av { width: 66px; height: 66px; font-size: 24px; }
-  .pd .crown { position: absolute; top: -20px; width: 26px; height: 26px; fill: var(--green); stroke: #fff; stroke-width: 1.4; stroke-linejoin: round; }
-  .prod .img .ph { width: 44%; height: 44%; fill: none; stroke: var(--green); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; opacity: .8; }
-  .pd .nm { font-size: 13px; font-weight: 700; margin-top: 6px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pd .av { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; font-weight: 700; background: #fff; color: var(--green-dark); border: 2px solid var(--green); position: relative; }
+  .pd.p1 .av { width: 62px; height: 62px; font-size: 22px; }
+  .pd .crown { position: absolute; top: -18px; width: 24px; height: 24px; fill: var(--green); stroke: #fff; stroke-width: 1.4; stroke-linejoin: round; }
+  .pd .nm { font-size: 13px; font-weight: 600; margin-top: 6px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pd .vl { font-size: 12px; color: var(--muted); }
-  .pd .base { width: 100%; margin-top: 8px; border-radius: 16px 16px 10px 10px; display: grid; place-items: center; font-size: 26px; font-weight: 700; color: #fff; background: var(--green); }
-  .pd.p1 .base { height: 92px; } .pd.p2 .base { height: 68px; background: var(--green-dark); } .pd.p3 .base { height: 52px; background: var(--green-tint); color: var(--green-dark); }
-  .pd.me .nm { color: var(--green); }
+  .pd .base { width: 100%; margin-top: 8px; border-radius: 12px 12px 8px 8px; display: grid; place-items: center; font-size: 22px; font-weight: 700; color: #fff; background: var(--green); }
+  .pd.p1 .base { height: 84px; } .pd.p2 .base { height: 62px; background: var(--green-dark); } .pd.p3 .base { height: 48px; background: var(--green-tint); color: var(--green-dark); }
   .lb .row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
   .lb .row:last-child { border-bottom: 0; }
-  .lb .rk { width: 32px; height: 32px; flex: none; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--green-tint); color: var(--green-dark); }
+  .lb .rk { width: 30px; height: 30px; flex: none; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 13px; background: #EEF1F0; color: var(--muted); }
   .lb .who { flex: 1; min-width: 0; }
-  .lb .who b { display: block; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .lb .val { font-weight: 700; color: var(--green-dark); font-size: 14px; }
-  .lb .row.me { background: var(--green-tint); margin: 0 -10px; padding: 11px 10px; border-radius: 14px; border-bottom-color: transparent; }
+  .lb .who b { display: block; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb .val { font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .lb .row.me { background: var(--green-tint); margin: 0 -10px; padding: 11px 10px; border-radius: 12px; border-bottom-color: transparent; }
   .lb .row.me .rk { background: var(--green); color: #fff; }
 
-  /* ===== Boost Program ===== */
-  .boost-hero { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 26px; padding: 22px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(0,90,75,.28); }
-  .boost-hero::after { content: ''; position: absolute; width: 230px; height: 230px; border-radius: 50%; background: var(--green-dark); right: -60px; top: -40px; }
+  /* ===== แคมเปญ ===== */
+  .boost-hero { position: relative; overflow: hidden; background: var(--green); color: #fff; border-radius: 20px; padding: 20px; margin-bottom: 12px; }
+  .boost-hero::after { content: ''; position: absolute; width: 220px; height: 220px; border-radius: 50%; background: var(--green-dark); right: -60px; top: -50px; }
   .boost-hero > * { position: relative; z-index: 1; }
-  .boost-hero .kick { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
-  .boost-hero .kick img { height: 18px; width: auto; display: block; }
-  .boost-hero .kick span { padding-left: 10px; border-left: 1px solid rgba(255,255,255,.6); }
-  .boost-hero .big11 { font-size: 64px; line-height: 1; font-weight: 700; letter-spacing: -.02em; margin: 6px 0 2px; }
-  .boost-hero .ttl { font-size: 22px; font-weight: 700; }
+  .boost-hero .kick { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+  .boost-hero .kick img { height: 16px; width: auto; display: block; }
+  .boost-hero .kick span { padding-left: 10px; border-left: 1px solid rgba(255, 255, 255, .6); }
+  .boost-hero .big11 { font-size: 56px; line-height: 1; font-weight: 700; letter-spacing: -.02em; margin: 10px 0 2px; }
+  .boost-hero .ttl { font-size: 19px; font-weight: 600; }
   .boost-hero .chips2 { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-  .boost-hero .pill { background: #fff; color: var(--green-dark); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 700; }
+  .boost-hero .pill { background: #fff; color: var(--green-dark); border-radius: 999px; padding: 4px 12px; font-size: 12.5px; font-weight: 600; }
   .boost-hero .pill.o { background: var(--green-dark); color: #fff; }
-  .boost-hero .comm { position: absolute; right: 22px; top: 22px; text-align: right; }
-  .boost-hero .comm b { display: block; font-size: 40px; line-height: 1; }
+  .boost-hero .comm { position: absolute; right: 20px; top: 20px; text-align: right; }
+  .boost-hero .comm b { display: block; font-size: 34px; line-height: 1; }
   .boost-hero .comm span { font-size: 12px; opacity: .9; }
   .details { white-space: pre-line; font-size: 14px; line-height: 1.7; }
-  .joined { display: flex; align-items: center; gap: 12px; background: var(--green-tint); color: var(--green-dark); border-radius: 18px; padding: 14px 16px; font-weight: 600; }
-  .joined .ok { width: 34px; height: 34px; flex: none; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; font-size: 18px; }
-
-  /* ===== TikTok / Missions ===== */
-  .at { display: flex; align-items: center; background: var(--fill-soft); border: 1px solid var(--line); border-radius: 14px; padding-left: 14px; }
-  .at span { color: var(--muted); font-weight: 600; }
-  .at input { border: 0; background: transparent; box-shadow: none; padding-left: 4px; }
-  .at:focus-within { border-color: rgba(0,120,100,.55); box-shadow: 0 0 0 4px rgba(0,120,100,.16); background: rgba(255,255,255,.9); }
-  .at input:focus { box-shadow: none; }
-  .comm-badge { align-self: flex-start; font-size: 12px; font-weight: 700; color: var(--green-dark); background: var(--green-tint); border-radius: 999px; padding: 2px 10px; }
-  .brief { font-size: 12.5px; color: var(--muted); }
-  .brief summary { cursor: pointer; color: var(--green); font-weight: 600; }
-  .brief div { white-space: pre-line; margin-top: 4px; }
-  .prod .btn.ghost { margin-top: 6px; }
-  .quick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .joined { display: flex; align-items: center; gap: 12px; background: var(--green-tint); color: var(--green-dark); border-radius: 14px; padding: 14px 16px; font-weight: 600; }
+  .joined .ok { width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; font-size: 16px; }
   .missions .mission { padding: 12px 0; border-top: 1px solid var(--line); }
   .missions .mission:first-of-type { border-top: 0; padding-top: 2px; }
   .missions .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
@@ -214,57 +226,43 @@
   .subs { margin-top: 8px; display: grid; gap: 4px; font-size: 12.5px; color: var(--muted); }
   .subs div { display: flex; justify-content: space-between; }
 
-  /* ===== Tab bar — แคปซูลลอย ===== */
-  nav { position: fixed; left: 14px; right: 14px; bottom: calc(12px + env(safe-area-inset-bottom)); border-radius: 32px; display: grid; grid-template-columns: repeat(6, 1fr); padding: 6px; z-index: 5; }
+  /* ===== เมนูล่าง (flat glass) ===== */
+  nav { position: fixed; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 5; display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px; border-radius: 22px; border: 1px solid rgba(18, 33, 30, .07); box-shadow: 0 8px 24px rgba(18, 33, 30, .08); }
   nav[hidden] { display: none; }
-  nav a { position: relative; z-index: 1; text-align: center; padding: 7px 2px 6px; border-radius: 24px; font-size: 10px; white-space: nowrap; line-height: 1.25; color: var(--muted); text-decoration: none; cursor: pointer; transition: background .25s, color .25s, transform .15s; }
-  nav a:active { transform: scale(.94); }
-  nav a svg { display: block; width: 23px; height: 23px; margin: 0 auto 2px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  nav a.on { color: #fff; font-weight: 700; background: var(--green); }
+  nav a { text-align: center; padding: 6px 2px 5px; border-radius: 16px; font-size: 11px; font-weight: 500; line-height: 1.3; color: var(--muted); text-decoration: none; cursor: pointer; white-space: nowrap; transition: background .2s, color .2s; }
+  nav a svg { display: block; width: 22px; height: 22px; margin: 0 auto 2px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  nav a.on { color: var(--green); font-weight: 600; background: var(--green-tint); }
 
-  /* ===== Toast / Mock bar ===== */
-  .toast { position: fixed; left: 16px; right: 16px; bottom: calc(100px + env(safe-area-inset-bottom)); background: rgba(15, 42, 38, .72); border-color: rgba(255,255,255,.18); color: #fff; padding: 13px 16px; border-radius: 20px; font-size: 14px; z-index: 10; opacity: 0; transform: translateY(12px) scale(.98); transition: .3s cubic-bezier(.2,.8,.2,1); pointer-events: none; }
+  /* ===== Toast / mock / misc ===== */
+  .toast { position: fixed; left: 16px; right: 16px; bottom: calc(96px + env(safe-area-inset-bottom)); background: var(--ink); color: #fff; padding: 13px 16px; border-radius: 14px; font-size: 14px; z-index: 10; opacity: 0; transform: translateY(10px); transition: .25s; pointer-events: none; }
   .toast.show { opacity: 1; transform: none; }
-  .toast.err { background: rgba(185, 28, 28, .82); }
-  .mockbar { margin: calc(10px + env(safe-area-inset-top)) 16px -6px; border-radius: 999px; color: var(--warn); font-size: 12px; padding: 6px 14px; text-align: center; }
+  .toast.err { background: var(--bad); }
+  .mockbar { background: var(--warn-tint); color: var(--warn); font-size: 12px; padding: 6px 16px; text-align: center; }
   .mockbar[hidden] { display: none; }
-
-  .center { text-align: center; padding: 40px 18px; }
-  .spinner { width: 34px; height: 34px; border: 3px solid rgba(0,120,100,.15); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
+  .center { text-align: center; padding: 36px 18px; }
+  .spinner { width: 30px; height: 30px; border: 3px solid var(--green-tint); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .empty { text-align: center; color: var(--muted); padding: 24px 0; }
-  a { color: var(--green); }
-
-  /* ===== Fallback & Accessibility ===== */
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .card, .prod, nav, .mockbar { background: rgba(255,255,255,.92); }
-  }
-  @media (prefers-reduced-transparency: reduce) {
-    .card, .prod, nav, .mockbar { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
-    .toast { background: #10302A; -webkit-backdrop-filter: none; backdrop-filter: none; }
-    .ambient i { display: none; }
-  }
-  @media (prefers-contrast: more) {
-    :root { --glass-fill: rgba(255,255,255,.9); --line: rgba(0,90,75,.35); --muted: #3B4A47; }
-  }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
-<div class="ambient" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div id="mockbar" class="mockbar" hidden>โหมดตัวอย่าง (Prototype) — ข้อมูลจำลอง ไม่ได้เชื่อมระบบจริง</div>
-<header>
-  <span class="brand glass"><img class="brand-logo" src="logo-green.png" alt="Dentiste'" onerror="this.remove()"><span class="brand-sep"></span>Affiliate+</span>
+<div class="topbar glass">
+  <img class="tb-logo" src="logo-green.png" alt="Dentiste'" onerror="this.remove()"><b class="tb-txt">Dentiste'</b>
+  <span class="tb-sep"></span><span class="tb-name">Affiliate+</span><span class="tb-sp"></span><span class="tb-pts num" id="tbpts" hidden></span>
+</div>
+<header class="ph">
+  <button class="back" id="back" hidden>‹ กลับ</button>
   <h1 id="h-title">Dentiste Affiliate+</h1><p id="h-sub">กำลังโหลด…</p>
 </header>
 <main id="app"><div class="card center"><div class="spinner"></div><div class="muted">กำลังโหลด…</div></div></main>
-<nav id="nav" hidden>
+<nav id="nav" class="glass" hidden>
+  <a data-p="me"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/></svg>หน้าหลัก</a>
   <a data-p="catalog"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>สินค้า</a>
-  <a data-p="requests"><svg viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8z"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>พัสดุ</a>
-  <a data-p="me"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19M6.5 15h4"/></svg>บัตร/แต้ม</a>
+  <a data-p="boost"><svg viewBox="0 0 24 24"><path d="M12 3c3 3.5 4.5 6.5 4.5 9.5a4.5 4.5 0 0 1-9 0c0-1.6.6-3 1.6-4.2.2 1.3.9 2.2 1.9 2.7C10.6 8.5 11 5.5 12 3z"/><path d="M12 21a2.2 2.2 0 0 0 2.2-2.2c0-1.3-1-2.3-2.2-3.6-1.2 1.3-2.2 2.3-2.2 3.6A2.2 2.2 0 0 0 12 21z"/></svg>แคมเปญ</a>
   <a data-p="leaderboard"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8M9 17h6"/></svg>อันดับ</a>
-  <a data-p="rewards"><svg viewBox="0 0 24 24"><path d="M4 11h16v10H4zM3 7h18v4H3zM12 7v14"/><path d="M12 7c-1.5-3-5-3.5-5-1.2C7 7 9 7 12 7c3 0 5 0 5-1.2C17 3.5 13.5 4 12 7z"/></svg>รางวัล</a>
-  <a data-p="invite"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M18 8v6M15 11h6"/></svg>ชวนเพื่อน</a>
+  <a data-p="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20.5c1-4 4.2-6 8-6s7 2 8 6"/></svg>ฉัน</a>
 </nav>
 <div id="toast" class="toast"></div>
 
@@ -281,7 +279,8 @@ function openExternal(url) {
   if (!MOCK && window.liff && liff.isInClient && liff.isInClient()) liff.openWindow({ url, external: true });
   else window.open(url, '_blank', 'noopener');
 }
-const PAGES = { register: pageRegister, catalog: pageCatalog, requests: pageRequests, me: pageMe, leaderboard: pageLeaderboard, boost: pageBoost, rewards: pageRewards, invite: pageInvite };
+const PAGES = { register: pageRegister, catalog: pageCatalog, requests: pageRequests, me: pageMe, leaderboard: pageLeaderboard, boost: pageBoost, rewards: pageRewards, invite: pageInvite, account: pageAccount, history: pageHistory };
+const TAB_OF = { requests: 'account', rewards: 'account', invite: 'account', history: 'account' };
 const params = new URLSearchParams(location.search);
 const MOCK = params.get('mock') === '1' || LIFF_ID.startsWith('YOUR_');
 const state = { me: null, page: params.get('page') || 'register', ref: params.get('ref') || '', campaign: params.get('c') || '' };
@@ -296,7 +295,23 @@ function toast(msg, err) {
   clearTimeout(toast.t); toast.t = setTimeout(() => { t.className = 'toast'; }, 2800);
 }
 function loading(msg) { app.innerHTML = `<div class="card center"><div class="spinner"></div><div class="muted">${esc(msg || 'กำลังโหลด…')}</div></div>`; }
-function header(title, sub) { $('#h-title').textContent = title; $('#h-sub').textContent = sub || ''; }
+function header(title, sub, back) {
+  $('#h-title').textContent = title; $('#h-sub').textContent = sub || '';
+  const b = $('#back'); b.hidden = !back; b.onclick = back ? () => go(back) : null;
+}
+function setPts(n) { const t = $('#tbpts'); t.textContent = fmt(n) + ' แต้ม'; t.hidden = false; }
+const ICON = {
+  truck: '<svg viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8z"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
+  clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  gift: '<svg viewBox="0 0 24 24"><path d="M4 11h16v10H4zM3 7h18v4H3zM12 7v14"/><path d="M12 7c-1.5-3-5-3.5-5-1.2C7 7 9 7 12 7c3 0 5 0 5-1.2C17 3.5 13.5 4 12 7z"/></svg>',
+  invite: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M18 8v6M15 11h6"/></svg>',
+  chat: '<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  video: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="13" height="14" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg>',
+  box: '<svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>',
+  flame: '<svg viewBox="0 0 24 24"><path d="M12 3c3 3.5 4.5 6.5 4.5 9.5a4.5 4.5 0 0 1-9 0c0-1.6.6-3 1.6-4.2.2 1.3.9 2.2 1.9 2.7C10.6 8.5 11 5.5 12 3z"/></svg>',
+  up: '<svg viewBox="0 0 24 24"><path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/></svg>',
+};
+const rowHtml = (r, attr) => `<div class="row" ${attr}><span class="ic ${r.warn ? 'warn' : ''}">${r.icon}</span><span class="tx"><b>${esc(r.t)}</b>${r.s ? `<span>${esc(r.s)}</span>` : ''}</span><span class="chev">›</span></div>`;
 
 async function api(action, data) {
   if (MOCK) return mockApi(action, data || {});
@@ -335,7 +350,8 @@ function go(page) {
   state.page = PAGES[page] ? page : 'me';
   const approved = state.me && state.me.affiliate && state.me.affiliate.status === 'approved';
   $('#nav').hidden = !approved;
-  document.querySelectorAll('nav a').forEach(a => a.classList.toggle('on', a.dataset.p === state.page));
+  const tab = TAB_OF[state.page] || state.page;
+  document.querySelectorAll('nav a').forEach(a => a.classList.toggle('on', a.dataset.p === tab));
   window.scrollTo(0, 0);
   PAGES[state.page]();
 }
@@ -443,7 +459,7 @@ async function pageCatalog() {
 /* ---------- พัสดุ / ส่งคอนเทนต์ ---------- */
 const REQ_BADGE = { requested: 'warn', approved: 'info', shipped: 'info', delivered: 'info', content_submitted: 'good', done: 'good', rejected: 'bad' };
 async function pageRequests() {
-  header('พัสดุ & คอนเทนต์', 'ติดตามของ และส่งลิงก์คอนเทนต์เพื่อรับแต้ม');
+  header('พัสดุ & คอนเทนต์', 'ติดตามของ และส่งลิงก์คลิปเพื่อรับแต้ม', 'account');
   loading();
   try {
     const d = await api('requests');
@@ -464,28 +480,89 @@ async function pageRequests() {
   } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
 }
 
-/* ---------- แต้ม ยอดขาย Bonus ---------- */
+/* ---------- หน้าหลัก ---------- */
 async function pageMe() {
-  header('บัตรสมาชิก & แต้ม', 'Dentiste Affiliate+ ของคุณ');
+  const a0 = state.me.affiliate || {};
+  header('สวัสดี ' + (String(a0.full_name || '').trim().split(/\s+/)[0] || ''), 'ภาพรวม Affiliate ของคุณ');
   loading();
   try {
-    const d = await api('dashboard');
+    const [d, pg, rq] = await Promise.all([api('dashboard'), api('program').catch(() => null), api('requests').catch(() => null)]);
+    setPts(d.affiliate.points);
     const b = d.bonus, steps = b.steps || [];
     const top = steps.length ? steps[steps.length - 1].min_sales : 0;
     const pct = top ? Math.min(100, d.sales_this_month / top * 100) : 0;
-    const TYPE = { register: 'สมัครสำเร็จ', content: 'ส่งคอนเทนต์', checkin: 'เช็กอิน', referral: 'ชวนเพื่อน', redeem: 'แลกรางวัล', refund: 'คืนแต้ม', mission_video: 'คลิปภารกิจแคมเปญ', mission_gmv: 'ทำยอดถึงเป้าแคมเปญ', manual: 'ปรับแต้ม' };
+    const p = pg && pg.program && pg.program.state !== 'ended' ? pg.program : null;
+    const reqs = (rq && rq.requests) || [];
+    const todos = [];
+    reqs.filter(r => r.can_submit).forEach(r => todos.push({ icon: ICON.video, t: 'ส่งลิงก์คลิปรีวิว ' + r.product_name, s: r.overdue ? 'เลยกำหนดส่งแล้ว' : 'ส่งภายใน ' + r.content_due, p: 'requests', warn: r.overdue }));
+    if (p && !pg.joined) todos.push({ icon: ICON.flame, t: 'เข้าร่วม ' + p.title, s: 'รับค่าคอมเพิ่ม ' + (p.extra_commission || ''), p: 'boost' });
+    else if (p && p.state === 'open' && p.video_target && ((pg.missions || {}).videos || 0) < p.video_target) todos.push({ icon: ICON.flame, t: 'ส่งคลิปภารกิจแคมเปญ', s: `${(pg.missions || {}).videos || 0}/${p.video_target} คลิป · ${p.hashtag}`, p: 'boost' });
+    if (!reqs.length) todos.push({ icon: ICON.box, t: 'ขอสินค้าตัวอย่างไปรีวิว', s: 'เลือกสินค้า และเพิ่มลง Showcase ใน TikTok', p: 'catalog' });
+    if (b.next) todos.push({ icon: ICON.up, t: `ขายเพิ่ม ฿${fmt(b.remaining)} ถึง Bonus ขั้น ${b.next.step}`, s: `รับ Bonus ${fmt(b.next.bonus)} ${b.unit}`, p: 'catalog' });
+    const m = (pg && pg.missions) || {};
+    const ST = { open: 'กำลังเปิด', upcoming: 'ลงทะเบียนล่วงหน้า' };
     app.innerHTML = memberCard(d.affiliate, d.rank) + `
-      <div class="quick"><button class="btn" onclick="go('boost')">แคมเปญ & ภารกิจ</button><button class="btn ghost" onclick="go('catalog')">สินค้า & Brief</button></div>
-      <div class="card">
-        <h2>Bonus ยอดขายเดือนนี้ (${esc(d.period)})</h2>
-        <div class="stat"><span class="muted">ยอดขาย</span><span class="big">฿${fmt(d.sales_this_month)}</span></div>
-        <div class="bar"><div style="width:${pct}%"></div></div>
-        <div class="muted">${b.next ? `ขายเพิ่มอีก <b>฿${fmt(b.remaining)}</b> ถึงขั้น ${b.next.step} รับ Bonus ${fmt(b.next.bonus)} ${esc(b.unit)}` : (b.current ? 'ถึงขั้นสูงสุดแล้ว' : '')}</div>
-        <div class="steps">${steps.map(s => `<div class="step ${b.current && s.step <= b.current.step ? 'hit' : ''}"><span>ขั้น ${s.step} · ขาย ฿${fmt(s.min_sales)}+</span><b>+${fmt(s.bonus)} ${esc(b.unit)}</b></div>`).join('')}</div>
-        <p class="muted" style="margin-bottom:0">ยอดเดือนที่แล้ว ฿${fmt(d.sales_last_month)} · ยอดขาย TikTok Shop อัปเดตเมื่อทีมนำเข้ารายงาน</p>
+      <div class="stats">
+        <div class="tile"><div class="k">ยอดขายเดือนนี้</div><div class="v">฿${fmt(d.sales_this_month)}</div></div>
+        <div class="tile"><div class="k">เดือนที่แล้ว</div><div class="v">฿${fmt(d.sales_last_month)}</div></div>
+        <div class="tile"><div class="k">ขั้น Bonus</div><div class="v">${b.current ? b.current.step : '-'}${steps.length ? '<span class="muted">/' + steps.length + '</span>' : ''}</div></div>
       </div>
-      ${d.bonuses.length ? `<div class="card list"><h2>ประวัติ Bonus</h2>${d.bonuses.map(x => `<div class="item"><div class="top"><span>${esc(x.period)} · ขั้น ${esc(x.step)}</span><span class="badge ${x.status === 'paid' ? 'good' : 'warn'}">${esc(x.status_th)}</span></div><div class="muted">ยอดขาย ฿${fmt(x.total_sales)} · Bonus ${fmt(x.bonus)} ${esc(b.unit)}</div></div>`).join('')}</div>` : ''}
-      <div class="card list"><h2>ประวัติแต้ม</h2>${d.activities.length ? d.activities.map(a => `<div class="item"><div class="top"><span>${esc(TYPE[a.type] || a.type)}${a.verified ? '' : ' <span class="badge warn">รอตรวจ</span>'}</span><b style="color:${a.points < 0 ? 'var(--bad)' : 'var(--green-dark)'}">${a.points > 0 ? '+' : ''}${fmt(a.points)}</b></div><div class="muted">${esc(a.date)}</div></div>`).join('') : '<div class="empty">ยังไม่มีรายการ</div>'}</div>`;
+      ${p ? `<div class="banner" id="bn">
+        <div class="bn-k">แคมเปญ · ${esc(ST[p.state] || '')}</div>
+        <div class="bn-t">${esc(p.title)}</div>
+        <div class="bn-s">${pg.joined ? (p.gmv_target ? `ยอดช่วงแคมเปญ ฿${fmt(m.gmv || 0)} / ฿${fmt(p.gmv_target)}` : 'คุณเข้าร่วมแล้ว') : `รับค่าคอมเพิ่ม ${esc(p.extra_commission || '')} · แตะเพื่อเข้าร่วม`}</div>
+        ${pg.joined && p.gmv_target ? `<div class="bar"><div style="width:${Math.min(100, (m.gmv || 0) / p.gmv_target * 100)}%"></div></div>` : ''}
+        <span class="bn-go">›</span></div>` : ''}
+      ${todos.length ? `<div class="sec-title">สิ่งที่ควรทำต่อ</div><div class="card menu">${todos.map((r, i) => rowHtml(r, `data-todo="${i}"`)).join('')}</div>` : ''}
+      <div class="sec-title">Bonus เดือนนี้ (${esc(d.period)})</div>
+      <div class="card">
+        <div class="stat"><span class="muted">ยอดขาย TikTok Shop</span><span class="big">฿${fmt(d.sales_this_month)}</span></div>
+        <div class="bar"><div style="width:${pct}%"></div></div>
+        <div class="muted">${b.next ? `ขายเพิ่มอีก <b>฿${fmt(b.remaining)}</b> ถึงขั้น ${b.next.step}` : (b.current ? 'ถึงขั้นสูงสุดแล้ว' : '')}</div>
+        <div class="steps">${steps.map(s => `<div class="step ${b.current && s.step <= b.current.step ? 'hit' : ''}"><span>ขั้น ${s.step} · ฿${fmt(s.min_sales)}+</span><b>+${fmt(s.bonus)} ${esc(b.unit)}</b></div>`).join('')}</div>
+        <p class="muted" style="margin-bottom:0">ยอดขายอัปเดตเมื่อทีมนำเข้ารายงานจาก TikTok Shop</p>
+      </div>`;
+    const bn = $('#bn'); if (bn) bn.addEventListener('click', () => go('boost'));
+    app.querySelectorAll('[data-todo]').forEach(el => el.addEventListener('click', () => go(todos[+el.dataset.todo].p)));
+  } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
+}
+
+/* ---------- ฉัน ---------- */
+function pageAccount() {
+  const a = state.me.affiliate;
+  header('ฉัน', 'บัญชี Dentiste Affiliate+');
+  const items = [
+    { p: 'requests', icon: ICON.truck, t: 'พัสดุ & คอนเทนต์', s: 'ติดตามสินค้าตัวอย่าง และส่งลิงก์คลิป' },
+    { p: 'history', icon: ICON.clock, t: 'ประวัติแต้ม & Bonus', s: 'รายการแต้มและ Bonus ย้อนหลัง' },
+    { p: 'rewards', icon: ICON.gift, t: 'แลกรางวัล', s: 'ใช้แต้มสะสมแลกของรางวัล' },
+    { p: 'invite', icon: ICON.invite, t: 'ชวนเพื่อน', s: 'รหัสชวนของคุณ ' + (a.my_ref_code || '-') },
+  ];
+  app.innerHTML = `
+    <div class="card profile"><div class="avatar">${esc(String(a.full_name || '?').trim().charAt(0))}</div>
+      <div style="min-width:0"><div style="font-weight:600;font-size:16px">${esc(a.full_name)}</div>
+      <div class="muted">${a.tiktok_username ? 'TikTok @' + esc(a.tiktok_username) + ' · ' : ''}${esc(a.affiliate_id)}</div>
+      <div class="muted">สมาชิกตั้งแต่ ${esc(a.registered_at)}</div></div></div>
+    <div class="card menu">${items.map((r, i) => rowHtml(r, `data-acc="${i}"`)).join('')}</div>
+    <div class="card menu">${rowHtml({ icon: ICON.chat, t: 'ติดต่อแอดมิน', s: 'กลับไปพิมพ์คุยในแชท LINE' }, 'id="contact"')}</div>`;
+  app.querySelectorAll('[data-acc]').forEach(el => el.addEventListener('click', () => go(items[+el.dataset.acc].p)));
+  $('#contact').addEventListener('click', () => { if (!MOCK && liff.isInClient && liff.isInClient()) liff.closeWindow(); else toast('พิมพ์ข้อความหาแอดมินได้ในแชท LINE'); });
+}
+
+/* ---------- ประวัติแต้ม & Bonus ---------- */
+async function pageHistory() {
+  header('ประวัติแต้ม & Bonus', 'รายการย้อนหลังของคุณ', 'account');
+  loading();
+  try {
+    const d = await api('dashboard');
+    setPts(d.affiliate.points);
+    const unit = d.bonus.unit;
+    const TYPE = { register: 'สมัครสำเร็จ', content: 'ส่งคอนเทนต์', checkin: 'เช็กอิน', referral: 'ชวนเพื่อน', redeem: 'แลกรางวัล', refund: 'คืนแต้ม', mission_video: 'คลิปภารกิจแคมเปญ', mission_gmv: 'ทำยอดถึงเป้าแคมเปญ', manual: 'ปรับแต้ม' };
+    app.innerHTML = `
+      <div class="card stat"><span class="muted">แต้มคงเหลือ</span><span class="big">${fmt(d.affiliate.points)}</span></div>
+      <div class="sec-title">ประวัติ Bonus</div>
+      <div class="card list">${d.bonuses.length ? d.bonuses.map(x => `<div class="item"><div class="top"><span>${esc(x.period)} · ขั้น ${esc(x.step)}</span><span class="badge ${x.status === 'paid' ? 'good' : 'warn'}">${esc(x.status_th)}</span></div><div class="muted">ยอดขาย ฿${fmt(x.total_sales)} · Bonus ${fmt(x.bonus)} ${esc(unit)}</div></div>`).join('') : '<div class="empty">ยังไม่มี Bonus</div>'}</div>
+      <div class="sec-title">ประวัติแต้ม</div>
+      <div class="card list">${d.activities.length ? d.activities.map(a => `<div class="item"><div class="top"><span>${esc(TYPE[a.type] || a.type)}${a.verified ? '' : ' <span class="badge warn">รอตรวจ</span>'}</span><b class="num" style="color:${a.points < 0 ? 'var(--bad)' : 'var(--green-dark)'}">${a.points > 0 ? '+' : ''}${fmt(a.points)}</b></div><div class="muted">${esc(a.date)}</div></div>`).join('') : '<div class="empty">ยังไม่มีรายการ</div>'}</div>`;
   } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
 }
 
@@ -514,7 +591,7 @@ async function pageLeaderboard(by) {
     const t = d.top, has = t.length && t.some(x => x.value > 0);
     const pd = (x, cls) => x ? `<div class="pd ${cls} ${x.me ? 'me' : ''}"><div class="av">${cls === 'p1' ? '<svg class="crown" viewBox="0 0 24 24"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 10H5z"/></svg>' : ''}${ini(x.name)}</div><div class="nm">${esc(x.me ? 'คุณ' : x.name)}</div><div class="vl">${val(x.value)}</div><div class="base">${x.rank}</div></div>` : '<div></div>';
     app.innerHTML = `
-      <div class="seg glass"><button data-by="sales" class="${by === 'sales' ? 'on' : ''}">ยอดขายเดือนนี้</button><button data-by="points" class="${by === 'points' ? 'on' : ''}">แต้มสะสม</button></div>
+      <div class="seg"><button data-by="sales" class="${by === 'sales' ? 'on' : ''}">ยอดขายเดือนนี้</button><button data-by="points" class="${by === 'points' ? 'on' : ''}">แต้มสะสม</button></div>
       ${d.me ? `<div class="myrank"><div class="no">#${d.me.rank}</div><div class="t">อันดับของคุณ<br>จาก ${fmt(d.total)} คน</div><div class="v">${val(d.me.value)}</div></div>` : ''}
       ${has ? `
         <div class="podium">${pd(t[1], 'p2')}${pd(t[0], 'p1')}${pd(t[2], 'p3')}</div>
@@ -593,10 +670,11 @@ function missionsHtml(p, d) {
 
 /* ---------- แลกรางวัล ---------- */
 async function pageRewards() {
-  header('แลกรางวัล', 'ใช้แต้มสะสมแลกของรางวัล');
+  header('แลกรางวัล', 'ใช้แต้มสะสมแลกของรางวัล', 'account');
   loading();
   try {
     const d = await api('rewards');
+    setPts(d.points);
     app.innerHTML = `
       <div class="card stat"><span class="muted">แต้มที่ใช้ได้</span><span class="big">${fmt(d.points)}</span></div>
       ${d.rewards.length ? `<div class="grid">${d.rewards.map(r => `
@@ -614,7 +692,7 @@ async function pageRewards() {
 /* ---------- ชวนเพื่อน ---------- */
 function pageInvite() {
   const a = state.me.affiliate;
-  header('ชวนเพื่อน', 'เพื่อนสมัครและได้รับอนุมัติ คุณรับแต้มเพิ่ม');
+  header('ชวนเพื่อน', 'เพื่อนสมัครและได้รับอนุมัติ คุณรับแต้มเพิ่ม', 'account');
   const link = `https://liff.line.me/${LIFF_ID}?page=register&ref=${encodeURIComponent(a.my_ref_code || '')}`;
   app.innerHTML = `
     <div class="card">
