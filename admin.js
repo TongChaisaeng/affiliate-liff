@@ -34,10 +34,13 @@ function call(action, body) {
       .adminApi(action, body ? JSON.stringify(body) : '');
   });
 }
-async function load(key, force) {
-  if (!force && S.cache[key]) return S.cache[key];
-  S.cache[key] = await call(key);
-  return S.cache[key];
+const PEND = {};
+function load(key, force) {
+  if (!force && S.cache[key]) return Promise.resolve(S.cache[key]);
+  if (!force && PEND[key]) return PEND[key];
+  const p = call(key).then(d => { S.cache[key] = d; delete PEND[key]; return d; }, e => { delete PEND[key]; throw e; });
+  PEND[key] = p;
+  return p;
 }
 function toast(m, err) { const t = $('#toast'); t.textContent = m; t.className = 'toast show' + (err ? ' err' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = 'toast', 3200); }
 function loading() { app.innerHTML = '<div class="loading"><div class="spin"></div>กำลังโหลด…</div>'; }
@@ -587,6 +590,8 @@ $('#burger').addEventListener('click', () => $('#side').classList.toggle('show')
     $('#mee').textContent = S.boot.me; $('#mei').textContent = S.boot.me.charAt(0).toUpperCase();
     $('#sheetlink').href = $('#sheetlink2').href = S.boot.sheet_url;
     go('home');
+    // โหลดหน้าที่ใช้บ่อยล่วงหน้า เพื่อให้กดเมนูแล้วเปิดได้ทันที
+    setTimeout(() => ['creators', 'samples', 'videos'].forEach(k => load(k).catch(() => {})), 400);
   } catch (e) { fail(e); }
 })();
 /* ===================== mock data (โหมดตัวอย่างเมื่อเปิดไฟล์นอก Apps Script) ===================== */
