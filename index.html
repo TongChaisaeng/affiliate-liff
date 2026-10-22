@@ -194,6 +194,26 @@
   .joined { display: flex; align-items: center; gap: 12px; background: var(--green-tint); color: var(--green-dark); border-radius: 18px; padding: 14px 16px; font-weight: 600; }
   .joined .ok { width: 34px; height: 34px; flex: none; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; font-size: 18px; }
 
+  /* ===== TikTok / Missions ===== */
+  .at { display: flex; align-items: center; background: var(--fill-soft); border: 1px solid var(--line); border-radius: 14px; padding-left: 14px; }
+  .at span { color: var(--muted); font-weight: 600; }
+  .at input { border: 0; background: transparent; box-shadow: none; padding-left: 4px; }
+  .at:focus-within { border-color: rgba(0,120,100,.55); box-shadow: 0 0 0 4px rgba(0,120,100,.16); background: rgba(255,255,255,.9); }
+  .at input:focus { box-shadow: none; }
+  .comm-badge { align-self: flex-start; font-size: 12px; font-weight: 700; color: var(--green-dark); background: var(--green-tint); border-radius: 999px; padding: 2px 10px; }
+  .brief { font-size: 12.5px; color: var(--muted); }
+  .brief summary { cursor: pointer; color: var(--green); font-weight: 600; }
+  .brief div { white-space: pre-line; margin-top: 4px; }
+  .prod .btn.ghost { margin-top: 6px; }
+  .quick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .missions .mission { padding: 12px 0; border-top: 1px solid var(--line); }
+  .missions .mission:first-of-type { border-top: 0; padding-top: 2px; }
+  .missions .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .missions .tag { color: var(--green); }
+  .missions.locked .mission { opacity: .55; }
+  .subs { margin-top: 8px; display: grid; gap: 4px; font-size: 12.5px; color: var(--muted); }
+  .subs div { display: flex; justify-content: space-between; }
+
   /* ===== Tab bar — แคปซูลลอย ===== */
   nav { position: fixed; left: 14px; right: 14px; bottom: calc(12px + env(safe-area-inset-bottom)); border-radius: 32px; display: grid; grid-template-columns: repeat(6, 1fr); padding: 6px; z-index: 5; }
   nav[hidden] { display: none; }
@@ -239,7 +259,7 @@
 </header>
 <main id="app"><div class="card center"><div class="spinner"></div><div class="muted">กำลังโหลด…</div></div></main>
 <nav id="nav" hidden>
-  <a data-p="catalog"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>ตัวอย่าง</a>
+  <a data-p="catalog"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>สินค้า</a>
   <a data-p="requests"><svg viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8z"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>พัสดุ</a>
   <a data-p="me"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19M6.5 15h4"/></svg>บัตร/แต้ม</a>
   <a data-p="leaderboard"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8M9 17h6"/></svg>อันดับ</a>
@@ -255,8 +275,12 @@ const LIFF_ID = '2012132241-ifUH9yrd';
 const API_URL = 'https://script.google.com/macros/s/AKfycbwZYpEBmFgLHa85fLGCe_m-_iq3DA_TMjVpmx_ERLBB_S2WpNef7toQzSBE3kNFVFfSIA/exec';
 /* ============================================ */
 
-const PLATFORMS = ['TikTok', 'Shopee', 'Lazada', 'Facebook', 'Instagram', 'YouTube', 'อื่นๆ'];
-const CATEGORIES = ['Beauty', 'Fashion', 'Food', 'Health', 'Gadget', 'Home', 'Mom & Kids'];
+const CATEGORIES = ['Beauty', 'Health & Wellness', 'Lifestyle', 'Review / Unbox', 'Family & Kids', 'Food'];
+const isTikTok = u => /^https?:\/\/([a-z0-9-]+\.)*tiktok\.com\//i.test(String(u || '').trim());
+function openExternal(url) {
+  if (!MOCK && window.liff && liff.isInClient && liff.isInClient()) liff.openWindow({ url, external: true });
+  else window.open(url, '_blank', 'noopener');
+}
 const PAGES = { register: pageRegister, catalog: pageCatalog, requests: pageRequests, me: pageMe, leaderboard: pageLeaderboard, boost: pageBoost, rewards: pageRewards, invite: pageInvite };
 const params = new URLSearchParams(location.search);
 const MOCK = params.get('mock') === '1' || LIFF_ID.startsWith('YOUR_');
@@ -333,22 +357,22 @@ function pageRegister() {
       ${!MOCK ? '<button class="btn ghost" onclick="liff.closeWindow()">กลับไปที่แชท</button>' : ''}</div>`;
     return;
   }
-  header('สมัคร Affiliate', 'ฟรี · รับสินค้าตัวอย่าง · สะสมแต้ม · รับ Bonus ตามยอดขาย');
+  header('สมัคร Affiliate', 'สำหรับ TikTok Creator · ฟรี · ติดตะกร้าสินค้า Dentiste\' รับค่าคอม + Bonus');
   app.innerHTML = `
   <form class="card" id="f" novalidate>
     <h2>ข้อมูลผู้สมัคร</h2>
     ${state.ref || state.me.lead_ref ? `<p class="muted">รหัสผู้แนะนำ: <b>${esc(state.ref || state.me.lead_ref)}</b></p>` : ''}
     <label>ชื่อ-นามสกุล <span class="req">*</span></label><input name="full_name" autocomplete="name" required>
     <label>เบอร์โทร <span class="req">*</span></label><input name="phone" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxx" required>
-    <h2 style="margin-top:20px">ช่องทางของคุณ</h2>
-    <label>แพลตฟอร์มหลัก <span class="req">*</span></label>
-    <select name="platform" required><option value="">เลือก…</option>${PLATFORMS.map(p => `<option>${p}</option>`).join('')}</select>
-    <label>ลิงก์ช่อง / โปรไฟล์ <span class="req">*</span></label><input name="channel_url" inputmode="url" placeholder="https://" required>
-    <div class="row2">
-      <div><label>ผู้ติดตาม</label><input name="followers" inputmode="numeric" placeholder="เช่น 12000"></div>
-      <div><label>Username Affiliate</label><input name="platform_affiliate_id" placeholder="ใช้จับคู่ยอดขาย"></div>
-    </div>
-    <label>หมวดสินค้าที่สนใจ</label>
+    <h2 style="margin-top:20px">TikTok ของคุณ</h2>
+    <label>TikTok username <span class="req">*</span></label>
+    <div class="at"><span>@</span><input name="tiktok_username" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="username" required></div>
+    <p class="muted" style="margin:6px 0 0">ใช้จับคู่ยอดขายจาก TikTok Shop อัตโนมัติ — กรอกให้ตรงกับบัญชีที่ติดตะกร้า</p>
+    <label>จำนวนผู้ติดตาม TikTok <span class="req">*</span></label><input name="followers" inputmode="numeric" placeholder="เช่น 12000" required>
+    <label>ขายของบน TikTok Shop แล้วหรือยัง <span class="req">*</span></label>
+    <div class="chips" id="shop"><span class="chip" data-v="selling">ติดตะกร้าขายอยู่แล้ว</span><span class="chip" data-v="new">ยังไม่เคย / เพิ่งเริ่ม</span></div>
+    <label>ช่องทางอื่น (ถ้ามี)</label><input name="other_channels" placeholder="เช่น IG @..., YouTube ...">
+    <label>แนวคอนเทนต์ของคุณ</label>
     <div class="chips" id="cats">${CATEGORIES.map(c => `<span class="chip" data-v="${c}">${c}</span>`).join('')}</div>
     <h2 style="margin-top:20px">ที่อยู่จัดส่งสินค้าตัวอย่าง</h2>
     <label>ที่อยู่ <span class="req">*</span></label><textarea name="address" autocomplete="street-address" required></textarea>
@@ -360,6 +384,7 @@ function pageRegister() {
     <button class="btn" style="margin-top:18px" id="submit">ส่งใบสมัคร</button>
   </form>`;
   document.querySelectorAll('#cats .chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('on')));
+  document.querySelectorAll('#shop .chip').forEach(c => c.addEventListener('click', () => { document.querySelectorAll('#shop .chip').forEach(x => x.classList.toggle('on', x === c)); }));
   $('#f').addEventListener('submit', ev => {
     ev.preventDefault();
     const fd = new FormData(ev.target);
@@ -367,6 +392,9 @@ function pageRegister() {
     form.consent = !!fd.get('consent');
     form.categories = [...document.querySelectorAll('#cats .chip.on')].map(c => c.dataset.v);
     form.ref = state.ref || state.me.lead_ref || '';
+    form.campaign = state.campaign || '';
+    const shop = document.querySelector('#shop .chip.on'); form.tiktok_shop_status = shop ? shop.dataset.v : '';
+    form.tiktok_username = String(form.tiktok_username || '').trim().replace(/^@+/, '');
     act($('#submit'), async () => {
       const r = await api('register', { form });
       state.me.affiliate = r.affiliate;
@@ -378,7 +406,7 @@ function pageRegister() {
 
 /* ---------- ขอตัวอย่าง ---------- */
 async function pageCatalog() {
-  header('ขอสินค้าตัวอย่าง', 'เลือกสินค้าที่อยากรีวิว');
+  header('สินค้า & ขอตัวอย่าง', 'เพิ่มลง Showcase ติดตะกร้า และขอสินค้าไปรีวิว');
   loading();
   try {
     const d = await api('catalog');
@@ -396,10 +424,14 @@ async function pageCatalog() {
           <div class="img">${p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy">` : '<svg class="ph" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>'}</div>
           <div class="b">
             <span class="name">${esc(p.name)}</span>
-            <span class="muted">${esc(p.category || '')}${p.commission_note ? ' · ' + esc(p.commission_note) : ''}</span>
-            <button class="btn" data-sku="${esc(p.sku)}" ${can ? '' : 'disabled'}>ขอตัวอย่าง</button>
+            <span class="muted">${esc(p.category || '')}</span>
+            ${p.commission_note ? `<span class="comm-badge">${esc(p.commission_note)}</span>` : ''}
+            ${p.brief ? `<details class="brief"><summary>Content brief</summary><div>${esc(p.brief)}</div></details>` : ''}
+            ${p.tiktok_url ? `<button class="btn" data-open="${esc(p.tiktok_url)}">เพิ่มลง Showcase</button>` : ''}
+            <button class="btn ghost" data-sku="${esc(p.sku)}" ${can && p.stock > 0 ? '' : 'disabled'}>${p.stock > 0 ? 'ขอตัวอย่าง' : 'ตัวอย่างหมด'}</button>
           </div>
         </div>`).join('')}</div>` : '<div class="card empty">ยังไม่มีสินค้าให้ขอในตอนนี้</div>'}`;
+    app.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => openExternal(b.dataset.open)));
     app.querySelectorAll('[data-sku]').forEach(b => b.addEventListener('click', () => act(b, async () => {
       await api('requestSample', { sku: b.dataset.sku });
       toast('ส่งคำขอแล้ว ติดตามสถานะได้ที่แชท');
@@ -422,11 +454,11 @@ async function pageRequests() {
         <div class="muted">ขอเมื่อ ${esc(r.requested_at)}${r.tracking_no ? ` · ${esc(r.carrier)} <b>${esc(r.tracking_no)}</b>` : ''}</div>
         ${r.content_due && !r.content_url ? `<div class="muted" style="color:${r.overdue ? 'var(--bad)' : ''}">ส่งคอนเทนต์ภายใน ${esc(r.content_due)}${r.overdue ? ' (เลยกำหนด)' : ''}</div>` : ''}
         ${r.content_url ? `<div class="muted">คอนเทนต์: <a href="${esc(r.content_url)}" target="_blank" rel="noopener">${esc(r.content_url.slice(0, 40))}…</a></div>` : ''}
-        ${r.can_submit ? `<div class="inline"><input placeholder="วางลิงก์โพสต์/คลิป" data-url="${esc(r.request_id)}" inputmode="url"><button class="btn sm" data-req="${esc(r.request_id)}">ส่ง</button></div>` : ''}
+        ${r.can_submit ? `<div class="inline"><input placeholder="วางลิงก์คลิป TikTok" data-url="${esc(r.request_id)}" inputmode="url"><button class="btn sm" data-req="${esc(r.request_id)}">ส่ง</button></div>` : ''}
       </div>`).join('')}</div>`;
     app.querySelectorAll('[data-req]').forEach(b => b.addEventListener('click', () => {
       const url = app.querySelector(`[data-url="${b.dataset.req}"]`).value.trim();
-      if (!/^https?:\/\//i.test(url)) return toast('ลิงก์ต้องขึ้นต้นด้วย http', true);
+      if (!isTikTok(url)) return toast('กรุณาวางลิงก์คลิปจาก TikTok', true);
       act(b, async () => { await api('submitContent', { request_id: b.dataset.req, url }); toast('ส่งลิงก์แล้ว รอทีมตรวจเพื่อรับแต้ม'); pageRequests(); });
     }));
   } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
@@ -441,21 +473,19 @@ async function pageMe() {
     const b = d.bonus, steps = b.steps || [];
     const top = steps.length ? steps[steps.length - 1].min_sales : 0;
     const pct = top ? Math.min(100, d.sales_this_month / top * 100) : 0;
-    const TYPE = { register: 'สมัครสำเร็จ', content: 'ส่งคอนเทนต์', checkin: 'เช็กอิน', referral: 'ชวนเพื่อน', redeem: 'แลกรางวัล', refund: 'คืนแต้ม' };
+    const TYPE = { register: 'สมัครสำเร็จ', content: 'ส่งคอนเทนต์', checkin: 'เช็กอิน', referral: 'ชวนเพื่อน', redeem: 'แลกรางวัล', refund: 'คืนแต้ม', mission_video: 'คลิปภารกิจแคมเปญ', mission_gmv: 'ทำยอดถึงเป้าแคมเปญ', manual: 'ปรับแต้ม' };
     app.innerHTML = memberCard(d.affiliate, d.rank) + `
-      ${d.points_checkin ? `<button class="btn ${d.checked_in_today ? 'ghost' : ''}" id="checkin" style="margin-bottom:14px" ${d.checked_in_today ? 'disabled' : ''}>${d.checked_in_today ? 'เช็กอินวันนี้แล้ว ✓' : 'เช็กอินวันนี้ +' + d.points_checkin + ' แต้ม'}</button>` : ''}
+      <div class="quick"><button class="btn" onclick="go('boost')">แคมเปญ & ภารกิจ</button><button class="btn ghost" onclick="go('catalog')">สินค้า & Brief</button></div>
       <div class="card">
         <h2>Bonus ยอดขายเดือนนี้ (${esc(d.period)})</h2>
         <div class="stat"><span class="muted">ยอดขาย</span><span class="big">฿${fmt(d.sales_this_month)}</span></div>
         <div class="bar"><div style="width:${pct}%"></div></div>
         <div class="muted">${b.next ? `ขายเพิ่มอีก <b>฿${fmt(b.remaining)}</b> ถึงขั้น ${b.next.step} รับ Bonus ${fmt(b.next.bonus)} ${esc(b.unit)}` : (b.current ? 'ถึงขั้นสูงสุดแล้ว' : '')}</div>
         <div class="steps">${steps.map(s => `<div class="step ${b.current && s.step <= b.current.step ? 'hit' : ''}"><span>ขั้น ${s.step} · ขาย ฿${fmt(s.min_sales)}+</span><b>+${fmt(s.bonus)} ${esc(b.unit)}</b></div>`).join('')}</div>
-        <p class="muted" style="margin-bottom:0">ยอดเดือนที่แล้ว ฿${fmt(d.sales_last_month)} · ยอดขายอัปเดตเมื่อทีมนำเข้ารายงานจากแพลตฟอร์ม</p>
+        <p class="muted" style="margin-bottom:0">ยอดเดือนที่แล้ว ฿${fmt(d.sales_last_month)} · ยอดขาย TikTok Shop อัปเดตเมื่อทีมนำเข้ารายงาน</p>
       </div>
       ${d.bonuses.length ? `<div class="card list"><h2>ประวัติ Bonus</h2>${d.bonuses.map(x => `<div class="item"><div class="top"><span>${esc(x.period)} · ขั้น ${esc(x.step)}</span><span class="badge ${x.status === 'paid' ? 'good' : 'warn'}">${esc(x.status_th)}</span></div><div class="muted">ยอดขาย ฿${fmt(x.total_sales)} · Bonus ${fmt(x.bonus)} ${esc(b.unit)}</div></div>`).join('')}</div>` : ''}
       <div class="card list"><h2>ประวัติแต้ม</h2>${d.activities.length ? d.activities.map(a => `<div class="item"><div class="top"><span>${esc(TYPE[a.type] || a.type)}${a.verified ? '' : ' <span class="badge warn">รอตรวจ</span>'}</span><b style="color:${a.points < 0 ? 'var(--bad)' : 'var(--green-dark)'}">${a.points > 0 ? '+' : ''}${fmt(a.points)}</b></div><div class="muted">${esc(a.date)}</div></div>`).join('') : '<div class="empty">ยังไม่มีรายการ</div>'}</div>`;
-    const c = $('#checkin');
-    if (c && !d.checked_in_today) c.addEventListener('click', () => act(c, async () => { const r = await api('checkin'); toast('+' + r.points + ' แต้ม'); pageMe(); }));
   } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
 }
 
@@ -466,7 +496,7 @@ function memberCard(a, rank) {
     <div class="mc-top"><img class="mc-logo" src="logo-white.png" alt="Dentiste'" onerror="this.remove()"><span class="mc-logo-txt">Dentiste'</span><span class="mc-sep"></span><span class="mc-tag">Affiliate+</span></div>
     <div class="mc-mid"><b>${fmt(a.points)}</b><span>แต้มสะสม</span></div>
     <div class="mc-bot">
-      <div><div class="mc-name">${esc(a.full_name)}</div><div class="mc-sub">${esc(a.affiliate_id)} · รหัสชวน ${esc(a.my_ref_code || '-')}<br>สมาชิกตั้งแต่ ${esc(a.registered_at)}</div></div>
+      <div><div class="mc-name">${esc(a.full_name)}</div><div class="mc-sub">${a.tiktok_username ? 'TikTok @' + esc(a.tiktok_username) + ' · ' : ''}${esc(a.affiliate_id)}<br>สมาชิกตั้งแต่ ${esc(a.registered_at)}</div></div>
       ${r}
     </div>
   </div>`;
@@ -507,7 +537,7 @@ async function pageBoost() {
     const ST = { open: 'เปิดรับแล้ว', upcoming: 'ลงทะเบียนล่วงหน้า', ended: 'จบโปรแกรมแล้ว' };
     const m = String(p.title).match(/\d+\.\d+/);
     let cta;
-    if (d.joined) cta = `<div class="joined"><span class="ok">✓</span><div>คุณเข้าร่วมโปรแกรมแล้ว<div class="muted" style="font-weight:400">เมื่อ ${esc(d.joined_at)} · ทีมงานจะแจ้งรายละเอียดทาง LINE</div></div></div>`;
+    if (d.joined) cta = `<div class="joined"><span class="ok">✓</span><div>คุณเข้าร่วมโปรแกรมแล้ว<div class="muted" style="font-weight:400">เมื่อ ${esc(d.joined_at)}</div></div></div>`;
     else if (p.state === 'ended') cta = '<button class="btn" disabled>ปิดรับแล้ว</button>';
     else if (d.member_status === 'approved') cta = '<button class="btn" id="join">เข้าร่วม Program รับค่าคอมเพิ่ม</button>';
     else if (d.member_status === 'pending') cta = '<button class="btn" disabled>รออนุมัติสมาชิก — เข้าร่วมได้หลังอนุมัติ</button>';
@@ -521,11 +551,44 @@ async function pageBoost() {
         <div class="chips2"><span class="pill">${esc(ST[p.state] || '')}</span>${p.start ? `<span class="pill o">${esc(p.start)} – ${esc(p.end)}</span>` : ''}</div>
       </div>
       <div style="margin-bottom:14px">${cta}</div>
+      ${missionsHtml(p, d)}
+      ${d.leaderboard && d.leaderboard.length ? `<div class="card lb"><h2>อันดับยอดขายในแคมเปญ</h2>${d.leaderboard.map(x => `<div class="row ${x.me ? 'me' : ''}"><span class="rk">${x.rank}</span><div class="who"><b>${esc(x.me ? 'คุณ' : x.name)}</b></div><span class="val">฿${fmt(x.value)}</span></div>`).join('')}</div>` : ''}
       <div class="card"><h2>${esc(p.headline || 'รายละเอียดโปรแกรม')}</h2><div class="details">${esc(p.details || '')}</div>
         ${d.total_joined ? `<p class="muted" style="margin-bottom:0">เข้าร่วมแล้ว ${fmt(d.total_joined)} คน</p>` : ''}</div>`;
+    const sv = $('#sendvid'); if (sv) sv.addEventListener('click', () => {
+      const url = $('#vidurl').value.trim();
+      if (!isTikTok(url)) return toast('กรุณาวางลิงก์คลิปจาก TikTok', true);
+      act(sv, async () => { await api('submitMission', { program_id: p.program_id, url }); toast('ส่งคลิปแล้ว รอทีมตรวจเพื่อรับแต้ม'); pageBoost(); });
+    });
     const j = $('#join'); if (j) j.addEventListener('click', () => act(j, async () => { await api('joinProgram', { program_id: p.program_id }); toast('เข้าร่วมโปรแกรมแล้ว 🚀'); pageBoost(); }));
     const g = $('#toreg'); if (g) g.addEventListener('click', () => go('register'));
   } catch (e) { app.innerHTML = `<div class="card center">${esc(e.message)}</div>`; }
+}
+
+function missionsHtml(p, d) {
+  if (!p.video_target && !p.gmv_target) return '';
+  const m = d.missions || { videos: 0, videos_approved: 0, gmv: 0, gmv_done: false };
+  const locked = !d.joined;
+  const pct = (a, b) => b ? Math.min(100, a / b * 100) : 0;
+  const ST = { pending: ['รอตรวจ', 'warn'], approved: ['ผ่าน', 'good'], rejected: ['ไม่ผ่าน', 'bad'] };
+  return `<div class="card missions ${locked ? 'locked' : ''}">
+    <h2>ภารกิจแคมเปญ</h2>
+    ${locked ? '<p class="muted" style="margin-top:0">กดเข้าร่วมโปรแกรมก่อน เพื่อเริ่มนับภารกิจ</p>' : ''}
+    ${p.video_target ? `<div class="mission">
+      <div class="top"><b>โพสต์คลิปติดตะกร้า ${p.video_target} คลิป</b><span class="muted">${m.videos}/${p.video_target}</span></div>
+      <div class="muted">ใส่แฮชแท็ก <b class="tag">${esc(p.hashtag)}</b>${p.points_per_video ? ` · คลิปละ ${fmt(p.points_per_video)} แต้ม` : ''}</div>
+      <div class="bar"><div style="width:${pct(m.videos, p.video_target)}%"></div></div>
+      ${!locked && p.state === 'open' ? `<div class="inline"><input id="vidurl" placeholder="วางลิงก์คลิป TikTok" inputmode="url"><button class="btn sm" id="sendvid">ส่ง</button></div>` : ''}
+      ${!locked && p.state === 'upcoming' ? '<p class="muted" style="margin-bottom:0">ส่งคลิปได้เมื่อแคมเปญเริ่ม</p>' : ''}
+      ${(d.submissions || []).length ? `<div class="subs">${d.submissions.map(x => `<div><span>${esc(x.date)}</span><span class="badge ${(ST[x.status] || [])[1] || ''}">${(ST[x.status] || [x.status])[0]}</span></div>`).join('')}</div>` : ''}
+    </div>` : ''}
+    ${p.gmv_target ? `<div class="mission">
+      <div class="top"><b>ทำยอดขายช่วงแคมเปญ ฿${fmt(p.gmv_target)}</b>${m.gmv_done ? '<span class="badge good">สำเร็จ</span>' : `<span class="muted">฿${fmt(m.gmv)}</span>`}</div>
+      <div class="muted">${p.gmv_reward_points ? `รับ ${fmt(p.gmv_reward_points)} แต้ม` : ''}${p.reward_note ? ' · ' + esc(p.reward_note) : ''}</div>
+      <div class="bar"><div style="width:${pct(m.gmv, p.gmv_target)}%"></div></div>
+      <p class="muted" style="margin:0">นับจากยอดขาย TikTok Shop ของ @บัญชีที่สมัคร${d.my_rank ? ` · อันดับในแคมเปญ #${d.my_rank}` : ''}</p>
+    </div>` : ''}
+  </div>`;
 }
 
 /* ---------- แลกรางวัล ---------- */
@@ -576,12 +639,12 @@ function pageInvite() {
 const MOCKDB = {
   aff: null, points: 0,
   products: [
-    { sku: 'S1', name: 'เซรั่มวิตามินซี 30ml', category: 'Beauty', image_url: '', stock: 12, commission_note: 'คอมฯ 12%' },
-    { sku: 'S2', name: 'กราโนล่าโฮลเกรน', category: 'Food', image_url: '', stock: 8, commission_note: 'คอมฯ 8%' },
-    { sku: 'S3', name: 'หูฟังไร้สาย Lite', category: 'Gadget', image_url: '', stock: 3, commission_note: 'คอมฯ 6%' },
-    { sku: 'S4', name: 'ครีมกันแดด SPF50', category: 'Beauty', image_url: '', stock: 20, commission_note: 'คอมฯ 10%' },
+    { sku: 'S1', name: 'ยาสีฟัน Dentiste\' Plus White 100g', category: 'Oral care', image_url: '', stock: 12, commission_note: 'คอมฯ 15%', tiktok_url: 'https://www.tiktok.com/', brief: 'จุดขาย: ลดกลิ่นปากตอนเช้า ฟันขาวสะอาด\nฮุก 3 วิแรก: ทดสอบลมหายใจตอนตื่นนอน' },
+    { sku: 'S2', name: 'สเปรย์ระงับกลิ่นปาก', category: 'Oral care', image_url: '', stock: 8, commission_note: 'คอมฯ 12%', tiktok_url: 'https://www.tiktok.com/', brief: 'ใช้ก่อนประชุม/เดท พกง่าย' },
+    { sku: 'S3', name: 'แปรงสีฟันขนนุ่มพิเศษ', category: 'Oral care', image_url: '', stock: 0, commission_note: 'คอมฯ 10%', tiktok_url: 'https://www.tiktok.com/', brief: '' },
+    { sku: 'S4', name: 'น้ำยาบ้วนปาก Night', category: 'Oral care', image_url: '', stock: 20, commission_note: 'คอมฯ 12%', tiktok_url: '', brief: '' },
   ],
-  requests: [], acts: [], redemptions: [], checkin: false,
+  requests: [], acts: [], redemptions: [], subs: [],
   rewards: [{ reward_id: 'R1', name: 'บัตรกำนัล 100 บาท', points_cost: 500, stock: 20 }, { reward_id: 'R2', name: 'เซ็ตสินค้าพรีเมียม', points_cost: 1500, stock: 5 }],
   steps: [{ step: 1, min_sales: 10000, bonus: 300 }, { step: 2, min_sales: 30000, bonus: 1200 }, { step: 3, min_sales: 80000, bonus: 4000 }],
 };
@@ -594,9 +657,9 @@ function mockApi(action, d) {
     case 'me': return wait({ name: 'ผู้ทดสอบ', lead_ref: d.ref || '', affiliate: pub(), brand: 'Dentiste Affiliate+' });
     case 'register': {
       const f = d.form;
-      for (const k of ['full_name', 'phone', 'platform', 'channel_url', 'address', 'province', 'postcode']) if (!String(f[k] || '').trim()) return fail('กรุณากรอกข้อมูลที่มี * ให้ครบ');
+      for (const k of ['full_name', 'phone', 'tiktok_username', 'followers', 'tiktok_shop_status', 'address', 'province', 'postcode']) if (!String(f[k] || '').trim()) return fail('กรุณากรอกข้อมูลที่มี * ให้ครบ');
       if (!f.consent) return fail('กรุณายินยอมให้เก็บข้อมูลส่วนบุคคล');
-      db.aff = { affiliate_id: 'AF-DEMO', full_name: f.full_name, platform: f.platform, status: 'approved', my_ref_code: 'K7Q2MX', registered_at: 'วันนี้' };
+      db.aff = { affiliate_id: 'AF-DEMO', full_name: f.full_name, platform: 'TikTok', tiktok_username: f.tiktok_username.toLowerCase(), status: 'approved', my_ref_code: 'K7Q2MX', registered_at: 'วันนี้' };
       addPts('register', 50);
       return wait({ affiliate: pub() });
     }
@@ -627,18 +690,21 @@ function mockApi(action, d) {
       return wait({ affiliate: pub(), period: '2026-10', sales_this_month: sales, sales_last_month: 9200,
         bonus: { steps, current, next, remaining: next ? next.min_sales - sales : 0, unit: 'บาท' },
         bonuses: [{ period: '2026-09', total_sales: 32500, step: 2, bonus: 1200, status: 'paid', status_th: 'จ่ายแล้ว' }],
-        activities: db.acts, checked_in_today: db.checkin, points_checkin: 5, rank: { rank: 4, total: 128 } });
+        activities: db.acts, rank: { rank: 4, total: 128 } });
     }
-    case 'checkin': if (db.checkin) return fail('วันนี้เช็กอินแล้ว'); db.checkin = true; addPts('checkin', 5); return wait({ points: 5 });
     case 'leaderboard': {
       const pts = d.by === 'points';
-      const names = [['ณัฐชา ส.', 'TikTok', 86500, 4200], ['ปิยะพงษ์ ก.', 'Shopee', 61200, 3650], ['มินตรา ว.', 'TikTok', 40800, 2980], ['คุณ', 'TikTok', 18400, db.points], ['ธนกร จ.', 'Lazada', 15300, 1720], ['อรอุมา ศ.', 'Instagram', 12950, 1400], ['สุภาวดี ม.', 'Facebook', 9800, 990], ['กิตติ ร.', 'YouTube', 7200, 860]];
+      const names = [['ณัฐชา ส.', 'TikTok', 86500, 4200], ['ปิยะพงษ์ ก.', 'TikTok', 61200, 3650], ['มินตรา ว.', 'TikTok', 40800, 2980], ['คุณ', 'TikTok', 18400, db.points], ['ธนกร จ.', 'TikTok', 15300, 1720], ['อรอุมา ศ.', 'TikTok', 12950, 1400], ['สุภาวดี ม.', 'TikTok', 9800, 990], ['กิตติ ร.', 'TikTok', 7200, 860]];
       const rows = names.map(n => ({ name: n[0], platform: n[1], value: pts ? n[3] : n[2], me: n[0] === 'คุณ' })).sort((a, b) => b.value - a.value).map((r, i) => Object.assign(r, { rank: i + 1 }));
       return wait({ by: pts ? 'points' : 'sales', period: '2026-10', total: 128, top: rows, me: rows.find(r => r.me) });
     }
-    case 'program': return wait({ program: { program_id: 'BOOST1111', title: 'Boost up 11.11', headline: 'เข้าร่วมโปรแกรม รับค่าคอมเพิ่มช่วงแคมเปญ 11.11', extra_commission: '+5%', start: '1 พ.ย. 2026', end: '15 พ.ย. 2026', state: 'upcoming',
-      details: '• รับค่าคอมมิชชั่นเพิ่มจากปกติ สำหรับยอดขายสินค้า Dentiste\' ช่วงแคมเปญ\n• ต้องกดเข้าร่วมก่อนแคมเปญจบ ยอดขายนับตั้งแต่วันที่เริ่มแคมเปญ\n• ค่าคอมส่วนเพิ่มจ่ายพร้อมรอบ Bonus เดือนถัดไป' },
-      member_status: db.aff ? db.aff.status : 'none', joined: !!db.boost, joined_at: db.boost ? 'วันนี้' : '', total_joined: 37 + (db.boost ? 1 : 0) });
+    case 'program': return wait({ program: { program_id: 'BOOST1111', title: 'Boost up 11.11', headline: 'เข้าร่วมโปรแกรม รับค่าคอมเพิ่มช่วงแคมเปญ 11.11', extra_commission: '+5%', start: '1 พ.ย. 2026', end: '15 พ.ย. 2026', state: 'open',
+      details: '• รับค่าคอมมิชชั่นเพิ่มจากปกติ สำหรับยอดขายสินค้า Dentiste\' บน TikTok Shop ช่วงแคมเปญ\n• ภารกิจ: โพสต์คลิปติดตะกร้าพร้อมแฮชแท็ก และทำยอดขายให้ถึงเป้า\n• ค่าคอมส่วนเพิ่มจ่ายพร้อมรอบ Bonus เดือนถัดไป',
+      hashtag: '#DentisteBoost1111', video_target: 3, points_per_video: 50, gmv_target: 10000, gmv_reward_points: 500, reward_note: '+ สิทธิ์ค่าคอมเพิ่มตามเงื่อนไขแคมเปญ' },
+      member_status: db.aff ? db.aff.status : 'none', joined: !!db.boost, joined_at: db.boost ? 'วันนี้' : '', total_joined: 37 + (db.boost ? 1 : 0),
+      missions: { videos: db.subs.length, videos_approved: 0, gmv: 6400, gmv_done: false }, submissions: db.subs.slice().reverse(), my_rank: db.boost ? 5 : null,
+      leaderboard: db.boost ? [{ rank: 1, name: 'ณัฐชา ส.', value: 24800 }, { rank: 2, name: 'มินตรา ว.', value: 15100 }, { rank: 3, name: 'ปิยะพงษ์ ก.', value: 9900 }, { rank: 4, name: 'ธนกร จ.', value: 7200 }, { rank: 5, name: 'คุณ', value: 6400, me: true }] : [] });
+    case 'submitMission': if (db.subs.some(x => x.url === d.url)) return fail('ลิงก์นี้ส่งไปแล้ว'); db.subs.push({ url: d.url, status: 'pending', date: 'วันนี้' }); return wait({ ok: true });
     case 'joinProgram': if (db.boost) return fail('คุณเข้าร่วมโปรแกรมนี้แล้ว'); db.boost = true; return wait({ joined: true });
     case 'rewards': return wait({ points: db.points, rewards: db.rewards, redemptions: db.redemptions });
     case 'redeem': {
