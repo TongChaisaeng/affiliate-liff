@@ -31,14 +31,14 @@
   @media (prefers-reduced-transparency: reduce) { .glass { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; } }
 
   /* ===== แถบบน ===== */
-  .topbar { position: sticky; top: 0; z-index: 6; display: flex; align-items: center; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) 18px 10px; border-bottom: 1px solid rgba(18, 33, 30, .06); }
+  .topbar { position: sticky; top: 0; z-index: 6; display: flex; align-items: center; justify-content: center; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) 18px 10px; border-bottom: 1px solid rgba(18, 33, 30, .06); }
   .tb-logo { height: 16px; width: auto; display: block; }
   .tb-logo + .tb-txt { display: none; }
   .tb-txt { font-weight: 700; color: var(--green); }
   .tb-sep { width: 1px; height: 14px; background: var(--line-strong); }
   .tb-name { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark); }
-  .tb-sp { flex: 1; }
-  .tb-pts { font-size: 12.5px; font-weight: 600; color: var(--green-dark); background: var(--green-tint); padding: 4px 10px; border-radius: 999px; }
+  .tb-sp { display: none; }
+  .tb-pts { position: absolute; right: 14px; bottom: 9px; font-size: 12px; font-weight: 600; color: var(--green-dark); background: var(--green-tint); padding: 4px 10px; border-radius: 999px; }
   .tb-pts[hidden] { display: none; }
 
   /* ===== หัวข้อหน้า ===== */
