@@ -325,8 +325,20 @@ const ICON = {
 const ROCKET = cls => `<svg class="${cls}" viewBox="0 0 120 165" aria-hidden="true"><g stroke="#0D2823" stroke-width="3.5" stroke-linejoin="round"><path d="M44 112C40 132 52 147 60 160C68 147 80 132 76 112Z" fill="#FF6A3D"/><path d="M51 112C49 127 55 138 60 147C65 138 71 127 69 112Z" fill="#FFC93C"/><path d="M43 74L22 106L24 120L45 106Z" fill="#FF6A3D"/><path d="M77 74L98 106L96 120L75 106Z" fill="#FF6A3D"/><path d="M60 6C89 27 87 90 79 112L41 112C33 90 31 27 60 6Z" fill="#fff"/><path d="M60 6C70 13 77 24 81 36L39 36C43 24 50 13 60 6Z" fill="#D9FF4A"/><circle cx="60" cy="62" r="13" fill="#007864" stroke-width="4.5"/><rect x="56" y="96" width="8" height="28" rx="4" fill="#FF6A3D"/></g><circle cx="55" cy="57" r="3.5" fill="#fff"/></svg>`;
 const rowHtml = (r, attr) => `<div class="row" ${attr}><span class="ic ${r.warn ? 'warn' : ''}">${r.icon}</span><span class="tx"><b>${esc(r.t)}</b>${r.s ? `<span>${esc(r.s)}</span>` : ''}</span><span class="chev">›</span></div>`;
 
-async function api(action, data) {
-  if (MOCK) return mockApi(action, data || {});
+/* ---------- API + แคช: เปิดหน้าครั้งเดียวยิง bundle เดียว, สลับแท็บใช้ข้อมูลที่โหลดไว้ ---------- */
+const READ_ACTIONS = ['me', 'catalog', 'requests', 'dashboard', 'rewards', 'leaderboard', 'program'];
+const PAGE_CALLS = {
+  me: [['dashboard'], ['program'], ['requests']], history: [['dashboard']], boost: [['program']], catalog: [['catalog']],
+  leaderboard: [['leaderboard', { by: 'sales' }]], rewards: [['rewards']], requests: [['requests']],
+};
+const PRE = new Map();            // key → { t, data } ผลที่โหลดไว้แล้ว
+const PEND = new Map();           // key → Promise ที่กำลังโหลด (bundle)
+const PRE_TTL = 120000;           // ใช้ข้อมูลที่โหลดไว้ได้ 2 นาที
+const pkey = (a, d) => a + '|' + JSON.stringify(d || {});
+const clone = v => (v == null ? v : JSON.parse(JSON.stringify(v)));
+const SNAP_KEY = 'daff_snap_v1';
+
+async function rawApi(action, data) {
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -337,22 +349,120 @@ async function api(action, data) {
   return j.data;
 }
 
+async function api(action, data) {
+  if (MOCK) return mockApi(action, data || {});
+  const isRead = READ_ACTIONS.indexOf(action) !== -1;
+  if (isRead) {
+    const k = pkey(action, data), h = PRE.get(k);
+    if (h && Date.now() - h.t < PRE_TTL) return clone(h.data);
+    if (PEND.has(k)) return clone(await PEND.get(k));
+    const out = await rawApi(action, data);
+    PRE.set(k, { t: Date.now(), data: out });
+    return clone(out);
+  }
+  const out = await rawApi(action, data);
+  PRE.clear(); // มีการเปลี่ยนข้อมูล → โหลดใหม่ครั้งถัดไป
+  return out;
+}
+
+/** รวมหลายคำสั่งอ่านใน request เดียว — คืน array ผลลัพธ์ { ok, data, error } */
+function bundle(calls) {
+  const p = rawApi('bundle', { calls: calls.map(([a, d]) => ({ action: a, data: d || {} })) });
+  calls.forEach(([a, d], i) => {
+    const k = pkey(a, d);
+    const one = p.then(r => {
+      PEND.delete(k);
+      const x = r[i] || { ok: false, error: 'ไม่มีข้อมูล' };
+      if (!x.ok) throw new Error(x.error);
+      PRE.set(k, { t: Date.now(), data: x.data });
+      return x.data;
+    }, e => { PEND.delete(k); throw e; });
+    one.catch(() => {});
+    PEND.set(k, one);
+  });
+  return p;
+}
+
+function snapLoad(uid) {
+  try {
+    const s = JSON.parse(localStorage.getItem(SNAP_KEY) || 'null');
+    if (!s || s.uid !== uid || Date.now() - s.t > 86400000 || !s.me) return null;
+    return s;
+  } catch (e) { return null; }
+}
+function snapSave(uid) {
+  try {
+    if (!uid || !state.me) return;
+    const pre = [];
+    PRE.forEach((v, k) => { if (!k.startsWith('me|')) pre.push([k, v.data]); });
+    localStorage.setItem(SNAP_KEY, JSON.stringify({ uid, t: Date.now(), me: state.me, pre }));
+  } catch (e) { /* ignore */ }
+}
+
+function routePage() {
+  const approved = state.me && state.me.affiliate && state.me.affiliate.status === 'approved';
+  if (!approved && state.page !== 'register' && state.page !== 'boost') state.page = 'register';
+  if (approved && state.page === 'register') state.page = 'me';
+  return approved;
+}
+
 async function boot() {
   try {
-    if (MOCK) { $('#mockbar').hidden = false; }
-    else {
-      await liff.init({ liffId: LIFF_ID });
-      if (!liff.isLoggedIn()) { liff.login({ redirectUri: location.href }); return; }
-      // หลัง init, query เดิมจาก liff.state จะกลับมาอยู่ใน location
-      const p = new URLSearchParams(location.search);
-      state.page = p.get('page') || state.page; state.ref = p.get('ref') || state.ref; state.campaign = p.get('c') || state.campaign;
+    if (MOCK) {
+      $('#mockbar').hidden = false;
+      state.me = await api('me', { ref: state.ref, campaign: state.campaign });
+      $('#h-title').textContent = state.me.brand || 'Dentiste Affiliate+';
+      routePage(); go(state.page);
+      return;
     }
-    state.me = await api('me', { ref: state.ref, campaign: state.campaign });
+    await liff.init({ liffId: LIFF_ID });
+    if (!liff.isLoggedIn()) { liff.login({ redirectUri: location.href }); return; }
+    // หลัง init, query เดิมจาก liff.state จะกลับมาอยู่ใน location
+    const p = new URLSearchParams(location.search);
+    state.page = p.get('page') || state.page; state.ref = p.get('ref') || state.ref; state.campaign = p.get('c') || state.campaign;
+    const asked = state.page;
+    let uid = '';
+    try { uid = (liff.getDecodedIDToken() || {}).sub || ''; } catch (e) { /* ignore */ }
+
+    // เริ่มโหลดข้อมูลจริงทันที: me + ข้อมูลของหน้าแรก ใน request เดียว
+    const first = [['me', { ref: state.ref, campaign: state.campaign }]].concat(PAGE_CALLS[asked] || []);
+    const loadFirst = bundle(first);
+
+    // 1) เคยเปิดแล้ว → แสดงข้อมูลล่าสุดทันที (แล้วค่อยอัปเดตด้านล่าง)
+    const snap = snapLoad(uid);
+    let shownKey = '';
+    if (snap) {
+      state.me = snap.me;
+      snap.pre.forEach(([k, d]) => PRE.set(k, { t: Date.now(), data: d }));
+      $('#h-title').textContent = state.me.brand || 'Dentiste Affiliate+';
+      routePage(); go(state.page);
+      shownKey = JSON.stringify(snap.me) + '|' + JSON.stringify((PAGE_CALLS[state.page] || []).map(([a, d]) => (PRE.get(pkey(a, d)) || {}).data));
+    }
+
+    // 2) รอข้อมูลจริง
+    const shownPage = state.page;
+    const res = await loadFirst;
+    if (!res[0] || !res[0].ok) throw new Error((res[0] && res[0].error) || 'โหลดข้อมูลไม่สำเร็จ');
+    state.me = res[0].data;
     $('#h-title').textContent = state.me.brand || 'Dentiste Affiliate+';
+    if (!snap) {
+      state.page = asked; routePage(); go(state.page);
+    } else if (state.page === shownPage && state.page !== 'register') {
+      // ข้อมูลเปลี่ยนจากที่แสดงไว้ → วาดหน้าใหม่ (เฉพาะถ้าผู้ใช้ยังอยู่หน้าเดิม)
+      const before = state.page; state.page = asked; routePage();
+      const nowKey = JSON.stringify(state.me) + '|' + JSON.stringify((PAGE_CALLS[state.page] || []).map(([a, d]) => (PRE.get(pkey(a, d)) || {}).data));
+      if (state.page !== before || nowKey !== shownKey) go(state.page); else state.page = before;
+    }
+
+    // 3) โหลดข้อมูลแท็บอื่นล่วงหน้า (สลับแท็บแล้วขึ้นทันที)
     const approved = state.me.affiliate && state.me.affiliate.status === 'approved';
-    if (!approved && state.page !== 'register' && state.page !== 'boost') state.page = 'register';
-    if (approved && state.page === 'register') state.page = 'me';
-    go(state.page);
+    const seen = {}; first.forEach(([a, d]) => { seen[pkey(a, d)] = 1; });
+    const rest = [];
+    (approved ? Object.keys(PAGE_CALLS) : ['boost']).forEach(pg => PAGE_CALLS[pg].forEach(([a, d]) => {
+      const k = pkey(a, d); if (!seen[k]) { seen[k] = 1; rest.push([a, d]); }
+    }));
+    if (rest.length) await bundle(rest).catch(() => null);
+    snapSave(uid);
   } catch (e) {
     app.innerHTML = `<div class="card center"><h2>เปิดหน้าไม่สำเร็จ</h2><p class="muted">${esc(e.message)}</p><button class="btn" onclick="location.reload()">ลองใหม่</button></div>`;
   }
